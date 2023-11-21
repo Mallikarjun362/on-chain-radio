@@ -13,6 +13,10 @@
 
 body {
   background: var(--bg-grad-1);
+  min-height: 100vh;
+  color: white;
+  width: 100vw;
+  overflow-x: hidden;
 }
 
 .pageSection {
@@ -21,10 +25,64 @@ body {
   background-color: #fff2;
 }
 .pageBody {
-  color: white;
-  padding: 50px 20%;
-  display: flex;
+  padding: 20px 20%;
   flex-direction: column;
+  display: flex;
   gap: 20px;
-  min-height: 100vh;
+}
+
+/* Audio Upload Form */
+.myUploadAudioForm {
+  background-color: #fff2;
+  flex-direction: column;
+  display: flex;
+  border-radius: 20px;
+  padding: 30px 50px;
+  font-size: 18px;
+  gap: 25px;
+}
+.myUploadAudioForm input[type='text'],
+input[type='datetime-local'] {
+  background-color: transparent;
+  border-bottom: 1px solid white;
+  outline: none;
+  padding: 10px;
+}
+
+.myUploadAudioForm
+  input[type='datetime-local']::-webkit-calendar-picker-indicator {
+  color: white;
+}
+
+.myUploadAudioForm option {
+  background-color: #0009;
+  font-size: 20px;
+  padding: 10px;
+}
+
+.myUploadAudioForm select,
+input[type='file']::file-selector-button {
+  background-color: #fff5;
+  outline: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
+
+.myUploadAudioForm div {
+  align-items: center;
+  font-size: 20px;
+  display: flex;
+  width: 50%;
+  gap: 20px;
+}
+
+.myUploadAudioForm label {
+  white-space: nowrap;
+}
+
+.myUploadAudioForm button[type='submit'] {
+  background-color: #fff5;
+  white-space: nowrap;
+  align-self: center;
+  padding: 10px 30px;
 }

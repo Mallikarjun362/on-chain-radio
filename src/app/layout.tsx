@@ -15,10 +15,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body
-        style={{ paddingTop: '80px'}}
-        suppressHydrationWarning={true}
-      >
+      <body suppressHydrationWarning={true}>
         <GlobalContextProvider>
           <MainNavigationBar />
           {children}

@@ -8,12 +8,12 @@ export function BrandTitleLogo({ title }: { title: string }) {
       style={{
         fontFamily: 'Times New Roman, Times, serif',
         alignItems: 'center',
-        fontSize: '30px',
+        fontSize: '35px',
         display: 'flex',
         gap: '20px',
       }}
     >
-      <PiRadio style={{ fontSize: '40px' }} />
+      <PiRadio style={{ fontSize: '45px' }} />
       <span style={{ display: 'block', whiteSpace: 'nowrap' }}>{title}</span>
     </Link>
   );
@@ -22,7 +22,7 @@ export function BrandTitleLogo({ title }: { title: string }) {
 export function NavLink({ url, name }: { url: string; name: string }) {
   return (
     <Link
-      className="bg-[#FFF2] hover:bg-[#FFF4]"
+      className="bg-[#FFF2] hover:bg-[#FFF4] transition duration-[400ms]"
       href={url}
       style={{
         borderRadius: '100px',

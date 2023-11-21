@@ -1,21 +1,52 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-export interface IAudio extends Document {
-    file_content: Buffer,
+export interface IAudio {
+    author_wallet_address: any,
+    end_streaming_time: Date,
+    collection_type: String,
+    streaming_time: Date,
     description: string,
-    created_at: Date,
+    monitized: Boolean,
+    ipfs_hash: String,
+    user: any,
     title: string,
-    author: any,
 }
 
+
 export const audio_schema = new Schema<IAudio>({
-    created_at: { type: Date, default: Date.now },
-    file_content: { type: Buffer },
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    ipfs_hash: { type: String, unique: true, index: true },
+    author_wallet_address: { type: String, required: true },
+    end_streaming_time: { type: Date },
+    collection_type: { type: String },
+    streaming_time: { type: Date },
     description: { type: String },
+    monitized: { type: Boolean },
     title: { type: String },
-    author: {}
 });
 
+audio_schema.pre('save', async function (next) {
+    const author_wallet_address = this.author_wallet_address;
+
+    try {
+        const the_user = await mongoose.model('User').findOne({ wallet_address: author_wallet_address });
+        if (the_user) {
+            this.user = the_user._id;
+        } else {
+            console.error(`User not found for wallet_address: ${author_wallet_address}`);
+        }
+        next();
+    } catch (err: any) {
+        next(err);
+    }
+})
+audio_schema.set('toObject', {
+    transform: function (doc, ret) {
+        ret._id = ret._id.toString();
+        return ret;
+    },
+});
+audio_schema.methods.toJSON = null;
 const audio_model = mongoose.models.Audio || mongoose.model<IAudio>('Audio', audio_schema);
 
 export default audio_model;

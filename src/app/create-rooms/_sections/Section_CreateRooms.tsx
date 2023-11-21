@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import { useGlobalContext } from '@/app/_context/store';
 import styles from '../styles.module.css';
 import { createRoom, getRoomsOfAnUser } from '@/utils/4_DatabaseActions';
@@ -25,7 +25,7 @@ function Section_CreateRooms() {
         ref={myForm}
         action={async (formdata: FormData) => {
           const room_title = formdata.get('title')?.toString().trim();
-          if(!wallet_address){
+          if (!wallet_address) {
             return alert('Connect Wallet !!');
           }
           if (room_title === '') {
@@ -84,29 +84,13 @@ function Section_CreateRooms() {
       </form>
       <br />
       <br />
-      {userCreatedRooms.length == 0 ? (
-        <center>
-          {/* <button
-            onClick={refreshRooms}
-            style={{
-              backgroundColor: '#fff2',
-              borderRadius: '100px',
-              fontSize: '15px',
-              padding: '5px 15px',
-            }}
-          >
-            Refresh Rooms
-          </button> 
-          */}
-          No Rooms Created
-        </center>
-      ) : (
+      {userCreatedRooms.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {userCreatedRooms.map((val, idx) => (
             <RoomChip roomObj={val} key={idx} />
           ))}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

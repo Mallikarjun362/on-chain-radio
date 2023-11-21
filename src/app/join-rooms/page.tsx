@@ -15,7 +15,7 @@ const CreatorPage = () => {
         <div className='pageSection' key={idx}>
           {val._id}
           <br />
-          <Link href={`/rooms/${val._id}#~${val.title}`}>Join Room</Link>
+          <Link href={`/join-rooms/${val._id}#~${val.title}`}>Join Room</Link>
         </div>
       ))}
     </div>

@@ -1,7 +1,7 @@
 'use client';
 import { setRoomActive, setRoomInactive } from '@/utils/4_DatabaseActions';
 import Link from 'next/link';
-import { CSSProperties, useState } from 'react';
+import { useState } from 'react';
 
 export default function RoomChip({ roomObj }: any) {
   const [room_status, setRoomStatus] = useState(roomObj.is_active);
@@ -19,12 +19,12 @@ export default function RoomChip({ roomObj }: any) {
   return (
     <div
       style={{
+        justifyContent: 'space-between',
         backgroundColor: '#fff1',
         borderRadius: '10px',
+        alignItems: 'center',
         padding: '10px',
         display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
       }}
     >
       <table style={{ fontSize: '20px' }}>
