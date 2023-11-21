@@ -123,3 +123,20 @@ export async function broadcastBlockchain({
   const broadcastTx = await aptos_wallet.signAndSubmitTransaction(transaction);
   console.log('Boardcast Success', broadcastTx);
 }
+
+
+export async function support({
+  aptos_wallet,
+  artist_address,
+  song_ipfs,
+  amount,
+}: any) {
+  const transaction = {
+    arguments: [amount, song_ipfs, artist_address],
+    function: `${MODULE_ADDRESS}::OnChainRadio::Donate`,
+    type: 'entry_function_payload',
+    type_arguments: [],
+  };
+  const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
+  console.log('Support Success', SupportTx);
+}
