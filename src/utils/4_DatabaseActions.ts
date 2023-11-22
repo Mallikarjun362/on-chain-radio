@@ -37,7 +37,7 @@ export async function fetchAllPostStreamingData() {
             $gt: Date.now(),
         }
     }).exec();
-    return JSON.parse(JSON.stringify(results));
+    return JSON.parse(JSON.stringify(results.map(doc=>doc._doc)));
 }
 
 export async function fetchAllCurrentStreamingData() {
@@ -50,7 +50,7 @@ export async function fetchAllCurrentStreamingData() {
             $gt: Date.now(),
         }
     }).exec();
-    return JSON.parse(JSON.stringify(results));
+    return JSON.parse(JSON.stringify(results.map(doc=>doc._doc)));
 }
 
 export async function fetchAllStreamedData() {
@@ -60,7 +60,7 @@ export async function fetchAllStreamedData() {
             $lt: Date.now(),
         }
     }).populate('user').exec();
-    return JSON.parse(JSON.stringify(results));
+    return JSON.parse(JSON.stringify(results.map(doc=>doc._doc )));
 }
 
 // -----------------------------AUDIO ROOM DATABASE FUNCTIONS-----------------------------
