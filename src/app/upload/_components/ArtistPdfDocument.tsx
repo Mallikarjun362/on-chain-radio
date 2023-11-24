@@ -105,7 +105,7 @@ const ArtistPDFDocument = ({
 }: any) => (
   <Document>
     {/* PAGE 1 */}
-    <Page size='A4' style={styles.page}>
+    <Page size="A4" style={styles.page}>
       <Text style={styles.title}>MUSIC COPYRIGHT AGREEMENT</Text>
       {TableSection('MUSIC COPYRIGHT AGREEMENT', {
         NAME: 'Tom',
@@ -131,8 +131,8 @@ const ArtistPDFDocument = ({
       <Text style={styles.sizeLow}>
         This Agreement is entered into on {new Date().getDate()}-
         {new Date().getMonth()}-{new Date().getFullYear()} by and between{' '}
-        {artist_name}, hereinafter referred to as the &quot;Licensor&quot;, hereinafter
-        referred to as the &quot;Licensee&quot;.
+        {artist_name}, hereinafter referred to as the &quot;Licensor&quot;,
+        hereinafter referred to as the &quot;Licensee&quot;.
       </Text>
       <View style={styles.vspace}></View>
       {Section(
