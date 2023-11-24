@@ -1,4 +1,4 @@
-import UploadAudioForm from '../_components/UploadAudioForm';
+import UploadAudioForm from './_components/UploadAudioForm';
 
 function UploadAudioPage() {
   return (
