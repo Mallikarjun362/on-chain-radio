@@ -1,7 +1,6 @@
 'use client';
 import { Provider, Network } from 'aptos';
 import { MODULE_ADDRESS } from './3_Constants';
-
 const provider = new Provider(Network.DEVNET);
 
 export async function registerAudio({

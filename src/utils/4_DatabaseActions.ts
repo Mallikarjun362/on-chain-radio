@@ -7,6 +7,7 @@ export async function uploadAudio({
     collection_type,
     streaming_time,
     description,
+    artist_name,
     monitized,
     ipfs_hash,
     title,
@@ -17,12 +18,13 @@ export async function uploadAudio({
         author_wallet_address,
         collection_type,
         description,
+        artist_name,
         monitized,
         ipfs_hash,
         title,
     });
     await new_audio.save();
-    return JSON.parse(JSON.stringify(new_audio));
+    return JSON.parse(JSON.stringify(new_audio._doc));
 }
 
 export async function changeToMonetized({ ipfs_hash }: any): Promise<boolean> {
@@ -63,7 +65,7 @@ export async function fetchAllStreamedData() {
     return JSON.parse(JSON.stringify(results.map(doc=>doc._doc )));
 }
 
-// -----------------------------AUDIO ROOM DATABASE FUNCTIONS-----------------------------
+// ----------------------------- <AUDIO-ROOM> DATABASE FUNCTIONS -----------------------------
 export async function getAllActiveRooms(): Promise<Array<typeof AudioRoomModel>> {
     const results = (await AudioRoomModel.find({ is_active: true }).exec())
     return JSON.parse(JSON.stringify(results));

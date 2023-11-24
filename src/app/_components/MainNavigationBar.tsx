@@ -22,12 +22,12 @@ function MainNavigationBar() {
   };
   return (
     <div
-      className="lg:flex lg:flex-row lg:h-[80px] lg:align-middle lg:justify-between | flex flex-col h-min "
+      className="lg:flex lg:flex-row lg:align-middle lg:justify-between | flex flex-col h-min "
       style={{
         backdropFilter: 'blur(50px)',
         backgroundColor: '#fff1',
         paddingRight: '150px',
-        padding: '20px 50px',
+        padding: '10px 50px',
         position: 'sticky',
         userSelect: 'none',
         width: '100vw',
@@ -36,7 +36,14 @@ function MainNavigationBar() {
       }}
     >
       <BrandTitleLogo title={page_content.title} />
-      <div className="lg:flex lg:flex-row lg:gap-[30px]">
+      <div
+        style={{
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          display: 'flex',
+          gap: '20px',
+        }}
+      >
         {Object.keys(primary_links).map((val: any, idx) => (
           <NavLink url={primary_links[val]} name={val} key={idx} />
         ))}

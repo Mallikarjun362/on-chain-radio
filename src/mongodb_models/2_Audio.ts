@@ -6,10 +6,11 @@ export interface IAudio {
     collection_type: String,
     streaming_time: Date,
     description: string,
+    artist_name: string,
     monitized: Boolean,
     ipfs_hash: String,
-    user: any,
     title: string,
+    user: any,
 }
 
 
@@ -21,6 +22,7 @@ export const audio_schema = new Schema<IAudio>({
     collection_type: { type: String },
     streaming_time: { type: Date },
     description: { type: String },
+    artist_name: { type: String },
     monitized: { type: Boolean },
     title: { type: String },
 });

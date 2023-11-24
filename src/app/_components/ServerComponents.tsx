@@ -22,15 +22,20 @@ export function BrandTitleLogo({ title }: { title: string }) {
 export function NavLink({ url, name }: { url: string; name: string }) {
   return (
     <Link
-      className="bg-[#FFF2] hover:bg-[#FFF4] transition duration-[400ms]"
+      className="bg-[#0005] hover:bg-[#FFF5]"
       href={url}
       style={{
         borderRadius: '100px',
-        padding: '3px 17px',
-        fontSize: '20px',
-        width:"min-content",
         whiteSpace: 'nowrap',
+        height: 'min-content',
+        padding: '5px 17px',
+        width: 'min-content',
+        fontSize: '20px',
+        transition: 'all',
+        transitionDuration: '400ms',
       }}
-    >{name}</Link>
+    >
+      {name}
+    </Link>
   );
 }
