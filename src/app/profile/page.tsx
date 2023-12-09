@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useEffect, useState } from 'react';
 import { useGlobalContext } from '../_context/store';
 import { Provider, Network } from 'aptos';
@@ -23,19 +23,20 @@ function ProfilePage() {
   const [signatureData, setSignatureData] = useState<Collection[]>([]);
 
   const getAccountDetails = async () => {
-    const provider = new Provider(Network.DEVNET);
+    const provider = new Provider(Network.TESTNET);
     try {
       const artistWorkResource = await provider.getAccountResource(
         wallet_address,
         `${MODULE_ADDRESS}::OnChainRadio::Artist_work`
       );
 
-      if (artistWorkResource?.data?.Collections?.data) {
-        setCollectionsData(artistWorkResource.data.Collections.data);
-        setSignatureData(artistWorkResource.data.Signature_Details.data);
+      if ((artistWorkResource as any)?.data?.Collections?.data) {
+        setCollectionsData((artistWorkResource as any).data.Collections.data);
+        setSignatureData(
+          (artistWorkResource as any).data.Signature_Details.data
+        );
       }
-      console.log(artistWorkResource.data)
-
+      console.log(artistWorkResource.data);
     } catch (e) {
       console.error('Error fetching account details:', e);
     }
@@ -43,7 +44,7 @@ function ProfilePage() {
 
   useEffect(() => {
     getAccountDetails();
-  },[]);
+  }, []);
 
   return (
     <div>
@@ -71,7 +72,9 @@ function ProfilePage() {
                 style={{ width: '100%', height: '150px', objectFit: 'cover' }}
               />
               <div style={{ padding: '15px' }}>
-                <p style={{ fontSize: '1.2em', fontWeight: 'bold' }}>{collection.value.collectionName}</p>
+                <p style={{ fontSize: '1.2em', fontWeight: 'bold' }}>
+                  {collection.value.collectionName}
+                </p>
                 <p>Collection Type: {collection.value.collectionType}</p>
                 <p>IPFS Hash: {collection.value.collection_ipfs_hash}</p>
                 {/* Add more fields as needed */}
@@ -81,7 +84,11 @@ function ProfilePage() {
         </div>
 
         {/* Signature Details Section */}
-        <h2 style={{ fontSize: '1.5em', marginTop: '20px', marginBottom: '10px' }}>Signature Details</h2>
+        <h2
+          style={{ fontSize: '1.5em', marginTop: '20px', marginBottom: '10px' }}
+        >
+          Signature Details
+        </h2>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
           {signatureData.map((collection) => (
             <div
@@ -98,10 +105,20 @@ function ProfilePage() {
               }}
             >
               <div style={{ padding: '15px' }}>
-                <p style={{ fontSize: '1.2em', fontWeight: 'bold' }}>Signature</p>
-                <p>{collection.value.Certifiate_Signature}</p>
-                <p style={{ fontSize: '1.2em', fontWeight: 'bold', marginTop: '10px' }}>Certificate Address</p>
-                <p>{collection.value.Ceritificate_IPFS_Address}</p>
+                <p style={{ fontSize: '1.2em', fontWeight: 'bold' }}>
+                  Signature
+                </p>
+                <p>{(collection as any).value.Certifiate_Signature}</p>
+                <p
+                  style={{
+                    fontSize: '1.2em',
+                    fontWeight: 'bold',
+                    marginTop: '10px',
+                  }}
+                >
+                  Certificate Address
+                </p>
+                <p>{(collection as any).value.Ceritificate_IPFS_Address}</p>
                 {/* Add more fields as needed */}
               </div>
             </div>

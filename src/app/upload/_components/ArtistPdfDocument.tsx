@@ -80,35 +80,38 @@ const Section = (section_name: string, content: any) => (
 );
 
 const ArtistPDFDocument = ({
-  artist_name = 'Tom',
-  collection_type = 'Song',
-  collection_name = 'Hello world',
+  artist_name = '',
+  title = '',
+  collection_type = '',
+  collection_name = '',
   stream_time = new Date().toISOString(),
-  song_hash = '0x123456789',
-  kyc = 'true',
+  song_hash = '',
   max_copies = 1,
   copies_released = 1,
   price = 1,
-  certificates_activated = 'true',
-  ipfs_address = '0x123456789',
+  transaction_hash = '',
+  ipfs_address = '',
   end_date = new Date().toISOString(),
+  artist_public_address = '',
+  artist_public_key = '',
+  hash = '',
+  artist_signature = '',
+  signature_timestamp = '',
+  // HARD CODED VALUES
+  kyc = 'true',
+  certificates_activated = 'true',
+  specify_dispute_resolution_mechanism = 'Dispute Resolution Mechanism',
   specify_royalty_terms = 'Royality Terms',
+  your_jurisdiction = 'Your Jurisdiction',
   specify_credit_terms = 'Credit Terms',
   exclusive_rights = 'Rights',
-  your_jurisdiction = 'Your Jurisdiction',
-  specify_dispute_resolution_mechanism = 'Dispute Resolution Mechanism',
-  artist_public_address = '0x123456789ABCDEFGHIJKLMNOPQRST',
-  artist_authentication_key = '0x123456789ABCDEFGHIJKLMNOPQRST',
-  hash = '0x123456789ABCDEFGHIJKLMNOPQRST',
-  artist_signature = '0x123456789ABCDEFGHIJKLMNOPQRST',
-  signature_timestamp = '0x123456789ABCDEFGHIJKLMNOPQRST',
 }: any) => (
   <Document>
     {/* PAGE 1 */}
     <Page size="A4" style={styles.page}>
       <Text style={styles.title}>MUSIC COPYRIGHT AGREEMENT</Text>
       {TableSection('MUSIC COPYRIGHT AGREEMENT', {
-        NAME: 'Tom',
+        TITLE: title,
         CREATED: new Date().toISOString(),
         'PLATFORM DETAILS': 'ON CHAIN RADIO',
       })}
@@ -177,8 +180,9 @@ const ArtistPDFDocument = ({
       )}
       {TableSection('LICENSOR', {
         'Artist Public Address': artist_public_address,
-        'Artist Authentication key': artist_authentication_key,
+        'Artist Authentication key': artist_public_key,
         Hash: hash,
+        'Transaction hash': transaction_hash,
         'Artict Signature': artist_signature,
         'Signature Timestamp': signature_timestamp,
       })}

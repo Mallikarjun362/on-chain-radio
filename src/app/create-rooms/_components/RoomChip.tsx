@@ -72,7 +72,7 @@ export default function RoomChip({ roomObj }: any) {
               fontSize: '18px',
               textAlign: 'center',
             }}
-            href={`/stream/${roomObj._id}#~${roomObj.title}`}
+            href={`/stream/${roomObj._id}`}
           >
             Start Room
           </Link>

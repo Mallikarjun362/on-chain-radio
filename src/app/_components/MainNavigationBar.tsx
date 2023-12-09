@@ -27,7 +27,7 @@ function MainNavigationBar() {
         backdropFilter: 'blur(50px)',
         backgroundColor: '#fff1',
         paddingRight: '150px',
-        padding: '10px 50px',
+        padding: '15px 50px',
         position: 'sticky',
         userSelect: 'none',
         width: '100vw',

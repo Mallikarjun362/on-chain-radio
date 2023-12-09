@@ -19,4 +19,4 @@ export const PINATA_JWT='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYX
 
 
 
-export const MODULE_ADDRESS = "0x7cd9c646ef8e71b92cf97d762493c07619aa2d92cbc76f02a7d4fc0910326ecb";
+export const MODULE_ADDRESS = "0x35ce65f9f29128edba76107c5c53adc35bac4e6193451f1fed272c4326db00cc";

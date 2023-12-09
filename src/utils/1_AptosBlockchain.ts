@@ -1,7 +1,18 @@
 'use client';
 import { Provider, Network } from 'aptos';
 import { MODULE_ADDRESS } from './3_Constants';
-const provider = new Provider(Network.DEVNET);
+import * as CryptoJS from 'crypto-js';
+
+function calculateSHA256Hash(jsonObject: any): string {
+  // Step 1: Convert the JSON object to a string
+  const jsonString = JSON.stringify(jsonObject);
+
+  // Step 2: Calculate the SHA-256 hash
+  const sha256Hash = CryptoJS.SHA256(jsonString).toString(CryptoJS.enc.Hex);
+
+  return sha256Hash;
+}
+const provider = new Provider(Network.TESTNET);
 
 export async function registerAudio({
   collectionType,
@@ -12,39 +23,27 @@ export async function registerAudio({
   wallet_address,
   artistName,
 }: any) {
+  /*
+  Purpose: 
+    Takes the arguments and registers the audio. (First blockchain function)
+  // artist_name, collection_type, collection_name, streaming_timestamp, ipfs_hash
+  */
   const transaction_1 = {
-    arguments: [collectionType, songName, streamingTime, ipfsHash],
+    arguments: [artistName, collectionType, songName, streamingTime, ipfsHash],
     function: `${MODULE_ADDRESS}::OnChainRadio::create_collection`,
     type: 'entry_function_payload',
     type_arguments: [],
   };
-
   try {
-    const ArtistWorkResource = await provider.getAccountResources(
-      wallet_address,
-      `${MODULE_ADDRESS}::OnChainRadio::Artist_work` as any
-    );
-    // console.log(ArtistWorkResource);
-
-    if (!ArtistWorkResource) {
-      const transaction_2 = {
-        arguments: [artistName],
-        function: `${MODULE_ADDRESS}::OnChainRadio::create_artist_work`,
-        type: 'entry_function_payload',
-        type_arguments: [],
-      };
-      const createResourceTransaction =
-        await aptos_wallet.signAndSubmitTransaction(transaction_2);
-    }
     const createCollectionTransaction =
       await aptos_wallet.signAndSubmitTransaction(transaction_1);
-    console.log(createCollectionTransaction);
+    console.log("Register audio success", createCollectionTransaction);
   } catch (error) {
     console.error('Error Registering Song', error);
   }
 }
 
-export const handleMonitizeSongToBlockchain = async ({
+export const signPdfDocument = async ({
   cid,
   noOfMaxCopies,
   noOfCopyReleased,
@@ -57,21 +56,10 @@ export const handleMonitizeSongToBlockchain = async ({
   streamingTime,
   aptos_wallet,
 }: any) => {
-  const transaction = {
-    arguments: [
-      cid,
-      true,
-      noOfMaxCopies,
-      noOfCopyReleased,
-      priceOfCopy,
-      true,
-      royality,
-      copyExpiryTimestamp,
-    ],
-    function: `${MODULE_ADDRESS}::OnChainRadio::Monitize_work`,
-    type: 'entry_function_payload',
-    type_arguments: [],
-  };
+  /*
+  Purpose: 
+    Takes the Arguments and signs the transaction with aptos wallet and returns the signature of the pdf document.
+  */
   try {
     const collectionDetails = {
       collectionType: collectionType,
@@ -95,34 +83,35 @@ export const handleMonitizeSongToBlockchain = async ({
       collectionDetail: collectionDetails,
       monitizationDetail: monitization,
     };
+
     let signedMessage = await aptos_wallet.signMessage({
       payload: messagePayload,
     });
-
-    //   const pendingTransaction = await aptos_wallet.signAndSubmitTransaction(transaction);
-    //   console.log(pendingTransaction);
-    return signedMessage.signature;
+    console.log("Sign document successful", signedMessage);
+    return { signature: signedMessage.signature, hash: calculateSHA256Hash(signedMessage) };
   } catch (error) {
-    console.log(error);
+    console.log("Error signing the pdf document", error);
   }
 };
 
 export async function broadcastBlockchain({
-  signature,
-  doc_ipfs,
-  song_ipfs,
-  aptos_wallet,
+  signature, song_ipfs, aptos_wallet, maxcopies,
+  currentCopies, price, royalities, certificateAddr, ceritifiateHash,
 }: any) {
+  /*
+  Purpose:
+    Takes the arguments and broadcasts it on blockchain. (Last blockchain function)
+  */
   const transaction = {
-    arguments: [song_ipfs, doc_ipfs, signature],
+    arguments: [song_ipfs, maxcopies, currentCopies, price, royalities, certificateAddr, ceritifiateHash, signature],
     function: `${MODULE_ADDRESS}::OnChainRadio::Broadcast`,
     type: 'entry_function_payload',
     type_arguments: [],
   };
   const broadcastTx = await aptos_wallet.signAndSubmitTransaction(transaction);
   console.log('Boardcast Success', broadcastTx);
+  return broadcastTx;
 }
-
 
 export async function support({
   aptos_wallet,
@@ -131,8 +120,8 @@ export async function support({
   amount,
 }: any) {
   const transaction = {
-    arguments: [amount, song_ipfs, artist_address],
-    function: `${MODULE_ADDRESS}::OnChainRadio::Donate`,
+    arguments: [artist_address, amount],
+    function: `0x01::aptos_account::transfer`,
     type: 'entry_function_payload',
     type_arguments: [],
   };

@@ -21,6 +21,7 @@ function Section_CreateRooms() {
   }, [wallet_address]);
   return (
     <div className={`${styles.pageSection}`}>
+      <h1>Create rooms</h1>
       <form
         ref={myForm}
         action={async (formdata: FormData) => {

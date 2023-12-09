@@ -1,17 +1,14 @@
 'use client';
-import {
-  fetchAllCurrentStreamingData,
-  fetchAllStreamedData,
-} from '@/utils/4_DatabaseActions';
-import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
-import { support } from '../../utils/1_AptosBlockchain';
-import { useGlobalContext } from '../_context/store';
-import { IAudio } from '@/mongodb_models/2_Audio';
+import { CSSProperties, useEffect, useState } from 'react';
 import { FaRegPlayCircle } from 'react-icons/fa';
+import { fetchAllStreamedData } from '@/utils/4_DatabaseActions';
+import { useGlobalContext } from '../_context/store';
+import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import 'react-h5-audio-player/lib/styles.css';
-import { useEffect, useState } from 'react';
+import { support } from '../../utils/1_AptosBlockchain';
+import { IAudio } from '@/mongodb_models/2_Audio';
 
-function CurrentStreamingAudioPage() {
+function StreamedAudiosSection() {
   // COMPONENT STATE VARIABLES
   const [audioList, setAudioList] = useState<Array<any>>([]);
   const { wallet_address, wallet_object } = useGlobalContext();
@@ -181,4 +178,4 @@ function CurrentStreamingAudioPage() {
   );
 }
 
-export default CurrentStreamingAudioPage;
+export default StreamedAudiosSection;

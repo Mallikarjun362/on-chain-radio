@@ -12,19 +12,25 @@ export async function uploadAudio({
     ipfs_hash,
     title,
 }: any): Promise<boolean> {
-    const new_audio = new AudioModel({
-        end_streaming_time: new Date(end_streaming_time),
-        streaming_time: new Date(streaming_time),
-        author_wallet_address,
-        collection_type,
-        description,
-        artist_name,
-        monitized,
-        ipfs_hash,
-        title,
-    });
-    await new_audio.save();
-    return JSON.parse(JSON.stringify(new_audio._doc));
+    try {
+
+        const new_audio = new AudioModel({
+            end_streaming_time: new Date(end_streaming_time),
+            streaming_time: new Date(streaming_time),
+            author_wallet_address,
+            collection_type,
+            description,
+            artist_name,
+            monitized,
+            ipfs_hash,
+            title,
+        });
+        await new_audio.save();
+        return JSON.parse(JSON.stringify(new_audio._doc));
+    } catch (e) {
+        console.log("Saving audio error", e);
+        return false
+    }
 }
 
 export async function changeToMonetized({ ipfs_hash }: any): Promise<boolean> {
@@ -39,7 +45,7 @@ export async function fetchAllPostStreamingData() {
             $gt: Date.now(),
         }
     }).exec();
-    return JSON.parse(JSON.stringify(results.map(doc=>doc._doc)));
+    return JSON.parse(JSON.stringify(results.map(doc => doc._doc)));
 }
 
 export async function fetchAllCurrentStreamingData() {
@@ -52,7 +58,7 @@ export async function fetchAllCurrentStreamingData() {
             $gt: Date.now(),
         }
     }).exec();
-    return JSON.parse(JSON.stringify(results.map(doc=>doc._doc)));
+    return JSON.parse(JSON.stringify(results.map(doc => doc._doc)));
 }
 
 export async function fetchAllStreamedData() {
@@ -62,7 +68,7 @@ export async function fetchAllStreamedData() {
             $lt: Date.now(),
         }
     }).populate('user').exec();
-    return JSON.parse(JSON.stringify(results.map(doc=>doc._doc )));
+    return JSON.parse(JSON.stringify(results.map(doc => doc._doc)));
 }
 
 // ----------------------------- <AUDIO-ROOM> DATABASE FUNCTIONS -----------------------------

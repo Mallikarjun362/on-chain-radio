@@ -1,5 +1,5 @@
 import HeroSection from './_sections/HeroSection';
-import StreamedAudiosSection from './_sections/StreamedAudios';
+import StreamedAudiosSection from './_sections/StreamedAudiosSection';
 
 export default function HomePage() {
   return (
