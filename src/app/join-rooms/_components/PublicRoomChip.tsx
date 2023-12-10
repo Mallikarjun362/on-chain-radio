@@ -1,10 +1,7 @@
 import Link from 'next/link';
 import { CiMusicNote1 } from 'react-icons/ci';
-import { GiRadarDish } from 'react-icons/gi';
-import { LuRadioTower } from 'react-icons/lu';
 
-function PublicRoomChip({ roomObj }: any) {
-  const icons = [<GiRadarDish />, <CiMusicNote1 />, <LuRadioTower />];
+function PublicRoomChip({ roomObj, key }: any) {
   return (
     <div
       style={{
@@ -53,7 +50,7 @@ function PublicRoomChip({ roomObj }: any) {
       >
         Join Room
       </Link>
-      <div style={{ fontSize: '40px' }}>{icons[1]}</div>
+      <CiMusicNote1 style={{ fontSize: '40px' }} />
     </div>
   );
 }

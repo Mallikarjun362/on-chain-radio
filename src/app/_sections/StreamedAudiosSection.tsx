@@ -209,6 +209,7 @@ function StreamedAudiosSection() {
             autoPlayAfterSrcChange={false}
             customControlsSection={[
               <div
+                key={0}
                 style={{
                   fontSize: '20px',
                   width: 'calc(50% - 20px)',
