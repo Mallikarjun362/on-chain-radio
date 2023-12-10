@@ -2,10 +2,12 @@
 import { useGlobalContext } from '@/app/_context/store';
 import { SOCKET_SERVER_URL } from '@/utils/3_Constants';
 import { getRoomDetailsById } from '@/utils/4_DatabaseActions';
+import { useState, CSSProperties, useEffect } from 'react';
 import { useParams } from 'next/navigation';
-import { useState, useRef, CSSProperties, useEffect } from 'react';
 import { Socket, io } from 'socket.io-client';
 import { support } from '@/utils/1_AptosBlockchain';
+import { GiMusicalScore, GiMusicalNotes } from 'react-icons/gi';
+import { PiMusicNotesPlusLight } from 'react-icons/pi';
 
 function ListenerRoom() {
   const { roomId } = useParams();
@@ -70,8 +72,13 @@ function ListenerRoom() {
           backgroundColor: '#fff3',
           padding: '20px',
           borderRadius: '20px',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          gap: '20px',
         }}
       >
+        <GiMusicalScore style={{ fontSize: '250px' }} />
         <table style={{ fontSize: '20px', width: '70%' }}>
           <style>
             {`
@@ -103,7 +110,13 @@ function ListenerRoom() {
           </tbody>
         </table>
         <br />
-        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            gap: '30px',
+          }}
+        >
           {clientSocket && is_connected ? (
             <button style={{ ...buttonStyle }} onClick={handleStopListen}>
               Stop Listen

@@ -1,17 +1,15 @@
 'use client';
 import { Provider, Network } from 'aptos';
 import { MODULE_ADDRESS } from './3_Constants';
-import * as CryptoJS from 'crypto-js';
+import { createHash } from 'crypto';
 
 function calculateSHA256Hash(jsonObject: any): string {
-  // Step 1: Convert the JSON object to a string
   const jsonString = JSON.stringify(jsonObject);
-
-  // Step 2: Calculate the SHA-256 hash
-  const sha256Hash = CryptoJS.SHA256(jsonString).toString(CryptoJS.enc.Hex);
-
-  return sha256Hash;
+  const hash = createHash('sha256');
+  hash.update(jsonString);
+  return hash.digest('hex');
 }
+
 const provider = new Provider(Network.TESTNET);
 
 export async function registerAudio({
@@ -113,45 +111,61 @@ export async function broadcastBlockchain({
   return broadcastTx;
 }
 
+
+
 export async function support({
   aptos_wallet,
   artist_address,
   amount,
 }: any) {
-  const transaction = {
-    arguments: [artist_address, amount],
-    function: `0x01::aptos_account::transfer`,
-    type: 'entry_function_payload',
-    type_arguments: [],
-  };
-  const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
-  console.log('Support Success', SupportTx);
+  try {
+    const transaction = {
+      arguments: [artist_address, amount],
+      function: `0x01::aptos_account::transfer`,
+      type: 'entry_function_payload',
+      type_arguments: [],
+    };
+    const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
+    console.log('Support Success', SupportTx);
+  } catch (e) {
+    console.log("Error Supporting", e)
+  }
 }
 
 
 // ---------------------------------------- PURCHASE
 export async function getPurchaseDetails({ seller_wallet_address }: any) {
-  const monitize_details = await provider.getAccountResource(
-    seller_wallet_address,
-    `${MODULE_ADDRESS}::OnChainRadio::Monitize_collection`
-  );
-  const signature_details = await provider.getAccountResource(
-    seller_wallet_address,
-    `${MODULE_ADDRESS}::OnChainRadio::SignatureDetails`
-  );
-  return {
-    monitize_details,
-    signature_details,
+  try {
+    const monitize_details = await provider.getAccountResource(
+      seller_wallet_address,
+      `${MODULE_ADDRESS}::OnChainRadio::Monitize_collection`
+    );
+    const signature_details = await provider.getAccountResource(
+      seller_wallet_address,
+      `${MODULE_ADDRESS}::OnChainRadio::SignatureDetails`
+    );
+    return {
+      monitize_details,
+      signature_details,
+    }
+  } catch (e) {
+    console.log("Error Getting Purchasing Details", e)
   }
 }
 
 export async function purchase({ aptos_wallet, song_ipfs, owner_artist_address, }: any) {
-  const transaction = {
-    arguments: [`"${song_ipfs}"`, owner_artist_address, owner_artist_address, "0x01"],
-    function: `${MODULE_ADDRESS}::OnChainRadio::Purchase`,
-    type: 'entry_function_payload',
-    type_arguments: [],
-  };
-  const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
-  console.log('Purchase Success', SupportTx);
+  try {
+    const transaction = {
+      arguments: [song_ipfs, owner_artist_address, owner_artist_address, "0x01"],
+      function: `${MODULE_ADDRESS}::OnChainRadio::Purchase`,
+      type: 'entry_function_payload',
+      type_arguments: [],
+    };
+    const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
+    console.log('Purchase Success', SupportTx);
+    return true;
+  } catch (e) {
+    console.log("Error Purchasing", e)
+  }
+
 }

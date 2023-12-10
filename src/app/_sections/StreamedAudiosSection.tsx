@@ -2,7 +2,6 @@
 import { fetchAllStreamedData } from '@/utils/4_DatabaseActions';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
 import {
-  getPurchaseDetails,
   support,
   purchase,
 } from '../../utils/1_AptosBlockchain';
@@ -12,7 +11,6 @@ import { IAudio } from '@/mongodb_models/2_Audio';
 import { FaRegPlayCircle } from 'react-icons/fa';
 import 'react-h5-audio-player/lib/styles.css';
 import { useEffect, useState } from 'react';
-import PurchaseDialog from '../_components/PurchaseDialog';
 
 function StreamedAudiosSection() {
   // COMPONENT STATE VARIABLES
@@ -22,15 +20,6 @@ function StreamedAudiosSection() {
   const [currentSongObject, setCurrentSongObject] = useState<null | IAudio>(
     null
   );
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const openDialog = () => {
-    setIsDialogOpen(true);
-  };
-
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-  };
 
   const handlePurchase = async ({ author_wallet_address, song_ipfs }: any) => {
     // const details = await getPurchaseDetails(author_wallet_address);
@@ -83,12 +72,11 @@ function StreamedAudiosSection() {
             gap: '10px',
           }}
         >
-          {/* STREAMED AUDIO LIST ITEM */}
           {audioList.map(
             (val, idx) =>
               val.ipfs_hash && (
                 <li
-                  className={`flex-col | lg:flex-row | md:flex-row`}
+                  className="flex-col bg-[#fff1]| lg:flex-row | md:flex-row"
                   key={idx}
                   style={{
                     background:
@@ -102,13 +90,11 @@ function StreamedAudiosSection() {
                     color: 'white',
                   }}
                 >
-                  {/* DIV 1 */}
                   <div>
-                    <span style={{ fontSize: '22px' }}>{val.title}</span>
+                    <span style={{ fontSize: '22px' }}>{val?.title}</span>
                     <br />
-                    <span style={{ color: '#fff6' }}>{val.description}</span>
+                    <span style={{ color: '#fff6' }}>{val?.description}</span>
                   </div>
-                  {/* DIV 2 */}
                   <div
                     className="gap-[20px] | lg:gap-[100px] | md:gap-[30px] "
                     style={{
@@ -117,7 +103,7 @@ function StreamedAudiosSection() {
                     }}
                   >
                     <div style={{ color: '#fff6', width: '40%' }}>
-                      {getDayDiff(val.streaming_time)}
+                      {getDayDiff(val?.streaming_time)}
                     </div>
                     <button
                       onClick={() => playAudio(val)}
@@ -135,18 +121,18 @@ function StreamedAudiosSection() {
                         background: '#1db954',
                         padding: '8px 12px',
                         borderRadius: '10%',
+                        userSelect: 'none',
                         cursor: 'pointer',
                         border: 'none',
                         color: '#fff',
-                        userSelect: 'none',
                       }}
-                      onClick={() =>
+                      onClick={() => {
                         support({
-                          artist_address: val.author_wallet_address,
+                          artist_address: val?.author_wallet_address,
                           aptos_wallet: wallet_object,
                           amount: 0.5e8,
                         })
-                      }
+                      }}
                     >
                       Support
                     </button>
@@ -162,10 +148,9 @@ function StreamedAudiosSection() {
                       }}
                       onClick={() => {
                         handlePurchase({
-                          author_wallet_address: val.author_wallet_address,
-                          song_ipfs: val.ipfs_hash,
+                          author_wallet_address: val?.author_wallet_address,
+                          song_ipfs: val?.ipfs_hash,
                         });
-                        openDialog();
                       }}
                     >
                       Purchase
@@ -176,10 +161,6 @@ function StreamedAudiosSection() {
           )}
         </ul>
       </div>
-      <PurchaseDialog isOpen={isDialogOpen} onClose={closeDialog}>
-        <p>This is the content of the dialog.</p>
-      </PurchaseDialog>
-
       {/* == AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER == */}
       {true ? (
         <div
@@ -211,8 +192,8 @@ function StreamedAudiosSection() {
               <div
                 key={0}
                 style={{
-                  fontSize: '20px',
                   width: 'calc(50% - 20px)',
+                  fontSize: '20px',
                 }}
               >
                 {'Now Playing: '}

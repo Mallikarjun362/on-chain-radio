@@ -11,7 +11,7 @@ export function ConnectWalletButton() {
     setConnectionStatus,
     setPublicKey,
     setJwtAuthToken,
-    setUserCreatedRooms
+    setUserCreatedRooms,
   } = useGlobalContext();
 
   // --------- ON COMPONENT LOAD FIRST TIME ---------
@@ -21,8 +21,8 @@ export function ConnectWalletButton() {
         const response = await (window as any).aptos.account();
         // CONNECT
         setWalletObject((window as any).aptos);
-        setWalletAddress(response.address);
-        setPublicKey(response.publicKey);
+        setWalletAddress(response?.address);
+        setPublicKey(response?.publicKey);
         setConnectionStatus(true);
         const temp_jwt_token = getCookieValue('jwt_auth_token');
         if (temp_jwt_token && temp_jwt_token?.length > 0) {
@@ -44,11 +44,18 @@ export function ConnectWalletButton() {
       }
     };
     onPageLoad().catch((err) => {});
-  }, []);
+  }, [
+    setWalletAddress,
+    setWalletObject,
+    setConnectionStatus,
+    setPublicKey,
+    setJwtAuthToken,
+    setUserCreatedRooms,
+  ]);
 
   const connectWallet = async () => {
     if ('aptos' in window) {
-      const response = await (window as any).aptos.connect();
+      const response = await (window as any)?.aptos?.connect();
       setWalletObject((window as any).aptos);
       setWalletAddress(response.address);
       setPublicKey(response.publicKey);
@@ -64,8 +71,8 @@ export function ConnectWalletButton() {
   const commonButtonStyle: CSSProperties = {
     borderRadius: '100px',
     padding: '5px 20px',
-    color: '#fff',
     fontSize: '20px',
+    color: '#fff',
   };
   // CONDITIONAL RENDERING
   if (wallet_address.length > 0) {

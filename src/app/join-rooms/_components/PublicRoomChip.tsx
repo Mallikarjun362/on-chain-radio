@@ -1,18 +1,20 @@
 import Link from 'next/link';
-import { CiMusicNote1 } from 'react-icons/ci';
 
-function PublicRoomChip({ roomObj, key }: any) {
+function PublicRoomChip({ roomObj }: any) {
   return (
     <div
+      className="flex-col | lg:flex-row | md:flex-row"
       style={{
         justifyContent: 'space-between',
         backgroundColor: '#fff2',
         borderRadius: '10px',
         alignItems: 'center',
-        padding: '10px',
         paddingRight: '30px',
+        overflow: 'hidden',
+        padding: '10px',
         display: 'flex',
-        gap: '20px',
+        width: '100%',
+        gap: '30px',
       }}
     >
       <table style={{ fontSize: '20px', width: '70%' }}>
@@ -44,13 +46,13 @@ function PublicRoomChip({ roomObj, key }: any) {
           backgroundColor: '#0F05',
           padding: '5px 15px',
           borderRadius: '100px',
+          whiteSpace: 'nowrap',
           fontSize: '17px',
         }}
         href={`/join-rooms/${roomObj._id}`}
       >
         Join Room
       </Link>
-      <CiMusicNote1 style={{ fontSize: '40px' }} />
     </div>
   );
 }
