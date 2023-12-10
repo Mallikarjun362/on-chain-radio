@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useGlobalContext } from '../_context/store';
 import { Provider, Network } from 'aptos';
 import { MODULE_ADDRESS } from '@/utils/3_Constants';
+import Section_UserProfile from '../create-rooms/_sections/Section_UserProfile';
 
 interface Collection {
   key: string;
@@ -23,6 +24,7 @@ function ProfilePage() {
   const [signatureData, setSignatureData] = useState<Collection[]>([]);
 
   const getAccountDetails = async () => {
+    
     const provider = new Provider(Network.TESTNET);
     try {
       const artistWorkResource = await provider.getAccountResource(
@@ -47,10 +49,25 @@ function ProfilePage() {
   }, []);
 
   return (
-    <div>
-      <div style={{ padding: '20px', marginBottom: '60px' }}>
-        <h1 style={{ fontSize: '2em', marginBottom: '20px' }}>Profile Audio</h1>
-
+    <main
+      style={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        display: 'flex',
+        width: '100%',
+      }}
+    >
+      <div
+        style={{
+          flexDirection: 'column',
+          marginBottom: '60px',
+          padding: '20px',
+          maxWidth: '60%',
+          display: 'flex',
+          gap: '30px',
+        }}
+      >
+        <Section_UserProfile />
         {/* Collections Section */}
         <h2 style={{ fontSize: '1.5em', marginBottom: '10px' }}>Collections</h2>
         <div style={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -125,7 +142,7 @@ function ProfilePage() {
           ))}
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

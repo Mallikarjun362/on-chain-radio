@@ -1,5 +1,9 @@
 'use client';
-import { setRoomActive, setRoomInactive } from '@/utils/4_DatabaseActions';
+import {
+  deleteRoomById,
+  setRoomActive,
+  setRoomInactive,
+} from '@/utils/4_DatabaseActions';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -50,6 +54,11 @@ export default function RoomChip({ roomObj }: any) {
             <td>{roomObj.title}</td>
           </tr>
           <tr>
+            <td>Description</td>
+            <td>:</td>
+            <td>{roomObj.description}</td>
+          </tr>
+          <tr>
             <td>Status</td>
             <td>:</td>
             <td>
@@ -62,20 +71,46 @@ export default function RoomChip({ roomObj }: any) {
           </tr>
         </tbody>
       </table>
-      {room_status ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <Link
-            style={{
-              backgroundColor: '#0F09',
-              borderRadius: '100px',
-              padding: '5px 20px',
-              fontSize: '18px',
-              textAlign: 'center',
-            }}
-            href={`/stream/${roomObj._id}`}
+      {/* DIVE RIGHT */}
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+          alignItems: 'end',
+        }}
+      >
+        {room_status ? (
+          <div
+            style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}
           >
-            Start Room
-          </Link>
+            <Link
+              style={{
+                backgroundColor: '#0F09',
+                borderRadius: '100px',
+                textAlign: 'center',
+                padding: '5px 20px',
+                fontSize: '18px',
+              }}
+              href={`/stream/${roomObj._id}`}
+            >
+              Start Room
+            </Link>
+            <button
+              style={{
+                backgroundColor: '#0003',
+                borderRadius: '100px',
+                padding: '5px 20px',
+                fontSize: '18px',
+              }}
+              onClick={toggle_status}
+            >
+              {'Set room Inactive'}
+            </button>
+          </div>
+        ) : null}
+
+        {!room_status ? (
           <button
             style={{
               backgroundColor: '#0003',
@@ -85,23 +120,26 @@ export default function RoomChip({ roomObj }: any) {
             }}
             onClick={toggle_status}
           >
-            {'Set room Inactive'}
+            {' Set room Active '}
           </button>
-        </div>
-      ) : null}
-      {!room_status ? (
+        ) : null}
         <button
           style={{
-            backgroundColor: '#0003',
+            backgroundColor: '#F008',
             borderRadius: '100px',
+            width: 'fit-content',
             padding: '5px 20px',
-            fontSize: '18px',
+            fontSize: '14px',
           }}
-          onClick={toggle_status}
+          onClick={async () =>
+            deleteRoomById(roomObj._id).then(() =>
+              alert('Room deleted Successfully')
+            )
+          }
         >
-          {' Set room Active '}
+          {' Delete'}
         </button>
-      ) : null}
+      </div>
     </div>
   );
 }

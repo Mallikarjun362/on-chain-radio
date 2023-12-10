@@ -14,7 +14,7 @@ import { IAudio } from '@/mongodb_models/2_Audio';
 
 function UploadAudioForm() {
   // COMPONENT STATE VARIABLES
-  const { wallet_address, wallet_object } = useGlobalContext();
+  const { wallet_address, wallet_object, public_key } = useGlobalContext();
   const [audioDbObj, setAudioDbObj] = useState<null | IAudio>(null);
   const [formData1, setFormData1] = useState<null | FormData>(null);
   const [formData2, setFormData2] = useState<null | FormData>(null);
@@ -23,24 +23,27 @@ function UploadAudioForm() {
   const [formState, setFormState] = useState<number>(0);
   const [isPageLoaded, setPageLoaded] = useState(false);
   const [audioObj, setAudioObj] = useState<any>(null);
+  const [pdfIpfsHash, setPdfIpfsHash] = useState<any>('');
   useEffect(() => {
     setPageLoaded(true);
   }, []);
-
+  const sleep = (s: number) => new Promise((r) => setTimeout(r, s * 1000));
   // SUBMISSION HANDLERS
   const handleFormSubmit1 = async (formdata: FormData) => {
+    let duration_in_seconds: number = 3 * 60;
+    const audio = new Audio();
+    audio.addEventListener('loadedmetadata', () => {
+      duration_in_seconds = audio.duration;
+    });
+    audio.src = URL.createObjectURL(formdata.get('audio_file') as Blob);
+    sleep(3);
     // 1 . UPLOAD AUDIO FILE S AND GET THE HASH
     const ipfs_formdata = new FormData();
     ipfs_formdata.append('audio_file', formdata.get('audio_file') as Blob);
     ipfs_formdata.append('file_name', formdata.get('title') as string);
     const ipfs_hash = await upload_to_ipfs(ipfs_formdata);
-    let duration_in_seconds: number = 0;
-    const audio = new Audio();
-    audio.addEventListener('loadedmetadata', () => {
-      duration_in_seconds = audio.duration;
-      console.log('Audio Duration', duration_in_seconds);
-    });
-    audio.src = URL.createObjectURL(formdata.get('audio_file') as Blob);
+
+    console.log('Audio Duration', duration_in_seconds);
     // 2. AUDIO DATABASE OBJECT
     const audio_obj = {
       description: formdata.get('description') as string,
@@ -114,9 +117,9 @@ function UploadAudioForm() {
     ipfs_formdata.append('audio_file', the_pdf_file as Blob);
     ipfs_formdata.append('file_name', formData1?.get('title') as string);
     const pdf_ipfs_hash = await upload_to_ipfs(ipfs_formdata);
-
+    setPdfIpfsHash(pdf_ipfs_hash);
     // BROAD-CAST ON BLOCKCHAIN
-    const broadcastTx = broadcastBlockchain({
+    const broadcastTx = await broadcastBlockchain({
       // DYNAMIC VALUES
       currentCopies: formData2?.get('num_of_copy_released'),
       maxcopies: formData2?.get('num_of_max_copies'),
@@ -280,17 +283,17 @@ function UploadAudioForm() {
               collection_name={audioObj?.collection_name}
               price={formData2?.get('price_of_copy')}
               end_date={audioObj?.end_streaming_time}
-              artist_public_address={wallet_address}
               stream_time={audioObj?.streaming_time}
               transaction_hash={broadcastTsx?.hash}
               artist_name={audioObj?.artist_name}
+              artist_public_address={public_key}
               hash={signatureResult?.hash || ''}
               song_hash={audioObj?.ipfs_hash}
+              ipfs_address={pdfIpfsHash} //CERTIFICATE IPFS ADDRESS
               title={audioObj?.title}
               // HARD CODED VALUES
               kyc="true"
               exclusive_rights="Rights"
-              ipfs_address="0x123456789"
               certificates_activated="true"
               specify_credit_terms="Credit Terms"
               your_jurisdiction="Your Jurisdiction"
@@ -340,17 +343,17 @@ function UploadAudioForm() {
               collection_name={audioObj?.collection_name}
               price={formData2?.get('price_of_copy')}
               end_date={audioObj?.end_streaming_time}
-              artist_public_address={wallet_address}
               stream_time={audioObj?.streaming_time}
               transaction_hash={broadcastTsx?.hash}
               artist_name={audioObj?.artist_name}
+              artist_public_address={public_key}
               hash={signatureResult?.hash || ''}
               song_hash={audioObj?.ipfs_hash}
+              ipfs_address={pdfIpfsHash} //CERTIFICATE IPFS ADDRESS
               title={audioObj?.title}
               // HARD CODED VALUES
               kyc="true"
               exclusive_rights="Rights"
-              ipfs_address="0x123456789"
               certificates_activated="true"
               specify_credit_terms="Credit Terms"
               your_jurisdiction="Your Jurisdiction"

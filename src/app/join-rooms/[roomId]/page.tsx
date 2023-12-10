@@ -1,14 +1,29 @@
 'use client';
+import { useGlobalContext } from '@/app/_context/store';
 import { SOCKET_SERVER_URL } from '@/utils/3_Constants';
+import { getRoomDetailsById } from '@/utils/4_DatabaseActions';
 import { useParams } from 'next/navigation';
-import { useState,useRef } from 'react';
+import { useState, useRef, CSSProperties, useEffect } from 'react';
 import { Socket, io } from 'socket.io-client';
+import { support } from '@/utils/1_AptosBlockchain';
 
 function ListenerRoom() {
   const { roomId } = useParams();
-  const [is_connected,setIsConnected] = useState<Boolean>(false);
-  const [clientSocket,setClientSocket] = useState<Socket|null>(null);
-  const datachunks = useRef([]);
+  const { wallet_address, wallet_object } = useGlobalContext();
+  const [roomObj, setRoomObj] = useState<any>(null);
+  const [is_connected, setIsConnected] = useState<Boolean>(false);
+  const [clientSocket, setClientSocket] = useState<Socket | null>(null);
+  useEffect(() => {
+    async function run() {
+      const result = await getRoomDetailsById(roomId as string);
+      setRoomObj(result);
+      console.log(result);
+    }
+    if (!roomObj) {
+      run();
+    }
+  }, []);
+
   const handleListen = () => {
     // SOCKET
     const cs = io(SOCKET_SERVER_URL);
@@ -32,17 +47,85 @@ function ListenerRoom() {
     clientSocket?.disconnect();
     setClientSocket(null);
   };
+  const buttonStyle: CSSProperties = {
+    fontSize: '18px',
+    backgroundColor: '#fff3',
+    padding: '5px 15px',
+    borderRadius: '100px',
+  };
 
   return (
-    <div className="pageBody">
-      <div className="pageSection">
-        {roomId}
+    <div
+      className="pageBody"
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: '100%',
+        height: '80vh',
+      }}
+    >
+      <div
+        style={{
+          backgroundColor: '#fff3',
+          padding: '20px',
+          borderRadius: '20px',
+        }}
+      >
+        <table style={{ fontSize: '20px', width: '70%' }}>
+          <style>
+            {`
+              td {
+                padding: 0px 5px;
+                white-space: nowrap;
+              }
+              td:first-child {
+                font-weight: bold;
+              }
+            `}
+          </style>
+          <tbody>
+            <tr>
+              <td>Room ID</td>
+              <td>:</td>
+              <td>{roomId}</td>
+            </tr>
+            <tr>
+              <td>Title</td>
+              <td>:</td>
+              <td>{roomObj?.title}</td>
+            </tr>
+            <tr>
+              <td>Description</td>
+              <td>:</td>
+              <td>{roomObj?.description}</td>
+            </tr>
+          </tbody>
+        </table>
         <br />
-        {clientSocket && is_connected ? (
-          <button onClick={handleStopListen}>Stop Listen</button>
-        ) : (
-          <button onClick={handleListen}>Listen</button>
-        )}
+        <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
+          {clientSocket && is_connected ? (
+            <button style={{ ...buttonStyle }} onClick={handleStopListen}>
+              Stop Listen
+            </button>
+          ) : (
+            <button style={{ ...buttonStyle }} onClick={handleListen}>
+              Listen
+            </button>
+          )}
+          <button
+            style={{ ...buttonStyle, backgroundColor: '#0F09' }}
+            onClick={() =>
+              support({
+                artist_address: roomObj?.main_author_wallet_address,
+                aptos_wallet: wallet_object,
+                amount: 0.5e8,
+              })
+            }
+          >
+            Support
+          </button>
+        </div>
       </div>
     </div>
   );

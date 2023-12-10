@@ -34,7 +34,8 @@ function Section_CreateRooms() {
           } else {
             const roomID = await createRoom(
               room_title as string,
-              wallet_address
+              wallet_address,
+              formdata.get('description')?.toString().trim() || ''
             );
             setUserCreatedRooms((prev) => [
               ...prev,
@@ -42,6 +43,8 @@ function Section_CreateRooms() {
                 _id: roomID,
                 main_author_wallet_address: wallet_address,
                 title: room_title,
+                description:
+                  formdata.get('description')?.toString().trim() || '',
               },
             ]);
             // alert(`Room Created of ${room_title} ${roomID}`);
@@ -49,26 +52,50 @@ function Section_CreateRooms() {
           }
         }}
         style={{
-          display: 'flex',
-          gap: '50px',
+          alignItems: 'center',
           padding: '0px 100px',
           fontSize: '20px',
+          display: 'flex',
+          gap: '50px',
         }}
       >
-        <input
-          type="text"
-          name="title"
-          id="title"
-          placeholder="title"
+        <div
           style={{
-            flexGrow: 1,
-            flexBasis: 'auto',
-            padding: '10px 20px',
-            backgroundColor: '#0000',
-            borderBottom: '1px solid #fff9',
-            outline: 'none',
+            justifyContent: 'center',
+            flexDirection: 'column',
+            alignItems: 'center',
+            display: 'flex',
           }}
-        />
+        >
+          <input
+            type="text"
+            name="title"
+            id="title"
+            placeholder="title"
+            style={{
+              flexGrow: 1,
+              flexBasis: 'auto',
+              padding: '10px 20px',
+              backgroundColor: '#0000',
+              borderBottom: '1px solid #fff9',
+              outline: 'none',
+            }}
+          />
+          <input
+            type="text"
+            name="description"
+            id="description"
+            placeholder="description"
+            style={{
+              flexGrow: 1,
+              flexBasis: 'auto',
+              padding: '10px 20px',
+              backgroundColor: '#0000',
+              borderBottom: '1px solid #fff9',
+              outline: 'none',
+            }}
+          />
+        </div>
         <button
           type="submit"
           style={{
@@ -78,6 +105,7 @@ function Section_CreateRooms() {
             padding: '5px 20px',
             flexBasis: 'min-content',
             whiteSpace: 'nowrap',
+            height: 'min-content',
           }}
         >
           Create Room

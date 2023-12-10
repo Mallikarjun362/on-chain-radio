@@ -2,6 +2,7 @@
 import { getAllActiveRooms } from '@/utils/4_DatabaseActions';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import PublicRoomChip from './_components/PublicRoomChip';
 
 const CreatorPage = () => {
   const [activeRooms, setActiveRooms] = useState<Array<any>>([]);
@@ -12,11 +13,7 @@ const CreatorPage = () => {
   return (
     <div className="pageBody">
       {activeRooms.map((val: any, idx: number) => (
-        <div className='pageSection' key={idx}>
-          {val._id}
-          <br />
-          <Link href={`/join-rooms/${val._id}#~${val.title}`}>Join Room</Link>
-        </div>
+        <PublicRoomChip key={idx} roomObj={val} />
       ))}
     </div>
   );

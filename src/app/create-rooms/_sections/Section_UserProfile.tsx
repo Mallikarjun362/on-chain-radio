@@ -88,7 +88,7 @@ function Section_UserProfile() {
                   backgroundColor: '#fff3',
                   padding: '10px',
                 }}
-                onClick={() => navigator.clipboard.writeText(wallet_address)}
+                onClick={() => navigator?.clipboard?.writeText(wallet_address)}
               >
                 <IoLink />
               </button>

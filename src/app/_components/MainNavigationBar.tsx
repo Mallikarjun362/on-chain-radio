@@ -22,12 +22,12 @@ function MainNavigationBar() {
   };
   return (
     <div
-      className="lg:flex lg:flex-row lg:align-middle lg:justify-between | flex flex-col h-min "
+      className="flex flex-col h-min | lg:flex lg:flex-row lg:align-middle lg:justify-between "
       style={{
-        backdropFilter: 'blur(50px)',
+        backdropFilter: 'blur(80px)',
         backgroundColor: '#fff1',
         paddingRight: '150px',
-        padding: '15px 50px',
+        padding: '20px 50px',
         position: 'sticky',
         userSelect: 'none',
         width: '100vw',
@@ -41,7 +41,7 @@ function MainNavigationBar() {
           alignItems: 'center',
           flexWrap: 'wrap',
           display: 'flex',
-          gap: '20px',
+          gap: '15px',
         }}
       >
         {Object.keys(primary_links).map((val: any, idx) => (

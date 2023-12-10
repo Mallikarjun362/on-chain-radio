@@ -87,15 +87,21 @@ export async function setRoomInactive(roomId: string) {
     return true
 }
 
-export async function createRoom(title: string, wallet_address: string) {
+export async function createRoom(title: string, wallet_address: string, description: string = "") {
     console.log("Function: Create Room");
     if (!wallet_address) {
         return false
     } else {
-        const new_audio_room = new AudioRoomModel({ main_author_wallet_address: wallet_address, title });
+        const new_audio_room = new AudioRoomModel({ main_author_wallet_address: wallet_address, title, description });
         await new_audio_room.save();
         return new_audio_room._id?.toString();
     }
+}
+
+export async function getRoomDetailsById(roomId: string) {
+    console.log("Get Room Details by ID")
+    const result = await AudioRoomModel.findById(roomId).select('main_author_wallet_address description title').exec();
+    return JSON.parse(JSON.stringify(result));
 }
 
 export async function getRoomsOfAnUser(wallet_address: string): Promise<Array<any>> {
@@ -104,7 +110,7 @@ export async function getRoomsOfAnUser(wallet_address: string): Promise<Array<an
     return JSON.parse(JSON.stringify(results));
 }
 
-export async function deleteRoom(roomId: string): Promise<any> {
+export async function deleteRoomById(roomId: string): Promise<any> {
     if (!roomId) throw Error("Room ID Required");
     await AudioRoomModel.findByIdAndDelete(roomId)
     return true

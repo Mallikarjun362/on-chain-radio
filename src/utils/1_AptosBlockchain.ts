@@ -116,7 +116,6 @@ export async function broadcastBlockchain({
 export async function support({
   aptos_wallet,
   artist_address,
-  song_ipfs,
   amount,
 }: any) {
   const transaction = {
@@ -127,4 +126,32 @@ export async function support({
   };
   const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
   console.log('Support Success', SupportTx);
+}
+
+
+// ---------------------------------------- PURCHASE
+export async function getPurchaseDetails({ seller_wallet_address }: any) {
+  const monitize_details = await provider.getAccountResource(
+    seller_wallet_address,
+    `${MODULE_ADDRESS}::OnChainRadio::Monitize_collection`
+  );
+  const signature_details = await provider.getAccountResource(
+    seller_wallet_address,
+    `${MODULE_ADDRESS}::OnChainRadio::SignatureDetails`
+  );
+  return {
+    monitize_details,
+    signature_details,
+  }
+}
+
+export async function purchase({ aptos_wallet, song_ipfs, owner_artist_address, }: any) {
+  const transaction = {
+    arguments: [`"${song_ipfs}"`, owner_artist_address, owner_artist_address, "0x01"],
+    function: `${MODULE_ADDRESS}::OnChainRadio::Purchase`,
+    type: 'entry_function_payload',
+    type_arguments: [],
+  };
+  const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
+  console.log('Purchase Success', SupportTx);
 }

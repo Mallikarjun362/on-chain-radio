@@ -1,12 +1,18 @@
 'use client';
-import { CSSProperties, useEffect, useState } from 'react';
-import { FaRegPlayCircle } from 'react-icons/fa';
 import { fetchAllStreamedData } from '@/utils/4_DatabaseActions';
-import { useGlobalContext } from '../_context/store';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
-import 'react-h5-audio-player/lib/styles.css';
-import { support } from '../../utils/1_AptosBlockchain';
+import {
+  getPurchaseDetails,
+  support,
+  purchase,
+} from '../../utils/1_AptosBlockchain';
+import { useGlobalContext } from '../_context/store';
+import { getDayDiff } from '@/utils/6_ClientUtils';
 import { IAudio } from '@/mongodb_models/2_Audio';
+import { FaRegPlayCircle } from 'react-icons/fa';
+import 'react-h5-audio-player/lib/styles.css';
+import { useEffect, useState } from 'react';
+import PurchaseDialog from '../_components/PurchaseDialog';
 
 function StreamedAudiosSection() {
   // COMPONENT STATE VARIABLES
@@ -16,6 +22,24 @@ function StreamedAudiosSection() {
   const [currentSongObject, setCurrentSongObject] = useState<null | IAudio>(
     null
   );
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const openDialog = () => {
+    setIsDialogOpen(true);
+  };
+
+  const closeDialog = () => {
+    setIsDialogOpen(false);
+  };
+
+  const handlePurchase = async ({ author_wallet_address, song_ipfs }: any) => {
+    // const details = await getPurchaseDetails(author_wallet_address);
+    purchase({
+      aptos_wallet: wallet_object,
+      song_ipfs: song_ipfs,
+      owner_artist_address: author_wallet_address,
+    });
+  };
 
   useEffect(() => {
     const run = async () => {
@@ -45,8 +69,11 @@ function StreamedAudiosSection() {
       }}
     >
       {/* == DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS == */}
-      <div style={{ width: '60%', padding: '20px', marginBottom: '200px' }}>
-        <h1 style={{ fontSize: '2em' }}>Your Library</h1>
+      <div
+        className="w-[80%] | lg:w-[60%] | md:w-[60%]"
+        style={{ marginBottom: '200px' }}
+      >
+        <h1 style={{ fontSize: '2em' }}>Recently streamed</h1>
         <br />
         <ul
           style={{
@@ -61,29 +88,37 @@ function StreamedAudiosSection() {
             (val, idx) =>
               val.ipfs_hash && (
                 <li
+                  className={`flex-col | lg:flex-row | md:flex-row`}
                   key={idx}
                   style={{
                     background:
                       currentSongObject?.ipfs_hash === val.ipfs_hash
                         ? '#1db954'
                         : '#fff1',
-                    color:
-                      currentSongObject?.ipfs_hash === val.ipfs_hash
-                        ? '#fff'
-                        : '#fff',
                     justifyContent: 'space-between',
-                    alignItems: 'center',
-                    borderRadius: '5px',
                     padding: '10px 30px',
+                    borderRadius: '5px',
                     display: 'flex',
+                    color: 'white',
                   }}
                 >
+                  {/* DIV 1 */}
                   <div>
                     <span style={{ fontSize: '22px' }}>{val.title}</span>
                     <br />
                     <span style={{ color: '#fff6' }}>{val.description}</span>
                   </div>
-                  <div style={{ display: 'flex', gap: '100px' }}>
+                  {/* DIV 2 */}
+                  <div
+                    className="gap-[20px] | lg:gap-[100px] | md:gap-[30px] "
+                    style={{
+                      alignItems: 'center',
+                      display: 'flex',
+                    }}
+                  >
+                    <div style={{ color: '#fff6', width: '40%' }}>
+                      {getDayDiff(val.streaming_time)}
+                    </div>
                     <button
                       onClick={() => playAudio(val)}
                       className="text-[#fff7] hover:text-[#fff]"
@@ -107,14 +142,33 @@ function StreamedAudiosSection() {
                       }}
                       onClick={() =>
                         support({
-                          artist_address: wallet_address,
+                          artist_address: val.author_wallet_address,
                           aptos_wallet: wallet_object,
-                          song_ipfs: val.ipfs_hash,
                           amount: 0.5e8,
                         })
                       }
                     >
                       Support
+                    </button>
+                    <button
+                      style={{
+                        background: '#1db954',
+                        padding: '8px 12px',
+                        borderRadius: '10%',
+                        cursor: 'pointer',
+                        border: 'none',
+                        color: '#fff',
+                        userSelect: 'none',
+                      }}
+                      onClick={() => {
+                        handlePurchase({
+                          author_wallet_address: val.author_wallet_address,
+                          song_ipfs: val.ipfs_hash,
+                        });
+                        openDialog();
+                      }}
+                    >
+                      Purchase
                     </button>
                   </div>
                 </li>
@@ -122,9 +176,12 @@ function StreamedAudiosSection() {
           )}
         </ul>
       </div>
+      <PurchaseDialog isOpen={isDialogOpen} onClose={closeDialog}>
+        <p>This is the content of the dialog.</p>
+      </PurchaseDialog>
 
       {/* == AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER ==== AUDIO PLAYER == */}
-      {currentSongUrl && (
+      {true ? (
         <div
           style={{
             backdropFilter: 'blur(100px)',
@@ -133,7 +190,7 @@ function StreamedAudiosSection() {
             position: 'fixed',
             padding: '10px',
             color: 'white',
-            width: '100%',
+            width: '100vw',
             bottom: 0,
           }}
         >
@@ -143,7 +200,7 @@ function StreamedAudiosSection() {
               outline: 'none',
               border: 'none',
             }}
-            src={currentSongUrl}
+            src={currentSongUrl || ''}
             autoPlay
             layout="stacked-reverse"
             showSkipControls={false}
@@ -173,7 +230,7 @@ function StreamedAudiosSection() {
             }}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

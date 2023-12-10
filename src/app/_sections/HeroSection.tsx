@@ -4,7 +4,7 @@ import LuxuryRadio from '@/../public/Illustrations/LuxuryRadio.png';
 function HeroSection() {
   return (
     <div
-      className="sm:flex sm:flex-col sm:gap-10 | lg:flex lg:flex-row lg:w-[100%] lg:p-36 lg:h-[80vh] | pl-[10%] pr-[10%] gap-10"
+      className="sm:flex sm:flex-col sm:gap-10 | lg:flex lg:flex-row lg:w-[100%] lg:p-[10%] lg:h-[80vh] | pl-[10%] pr-[10%] gap-10"
       style={{
         justifyContent: 'space-between',
         fontFamily: 'Times Romen',
