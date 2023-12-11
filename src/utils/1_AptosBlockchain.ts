@@ -156,13 +156,14 @@ export async function getPurchaseDetails({ seller_wallet_address }: any) {
 export async function purchase({ aptos_wallet, song_ipfs, owner_artist_address, }: any) {
   try {
     const transaction = {
-      arguments: [song_ipfs, owner_artist_address, owner_artist_address, "0x01"],
+      arguments: ['"0xeafb8d273e5fcc289f803742063dbf1c34df1633aa0429fc2fc04c624a45194b"', "0xeafb8d273e5fcc289f803742063dbf1c34df1633aa0429fc2fc04c624a45194b", owner_artist_address, "0x01"],
       function: `${MODULE_ADDRESS}::OnChainRadio::Purchase`,
       type: 'entry_function_payload',
       type_arguments: [],
     };
-    const SupportTx = await aptos_wallet.signAndSubmitTransaction(transaction);
-    console.log('Purchase Success', SupportTx);
+    const Tx = await aptos_wallet.signAndSubmitTransaction(transaction);
+    console.log('Purchase Success', Tx);
+    return Tx
     return true;
   } catch (e) {
     console.log("Error Purchasing", e)

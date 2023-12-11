@@ -79,7 +79,7 @@ const Section = (section_name: string, content: any) => (
   </View>
 );
 
-const ArtistPDFDocument = ({
+const BuyerPDFDocument = ({
   artist_name = '',
   title = '',
   collection_type = '',
@@ -87,16 +87,13 @@ const ArtistPDFDocument = ({
   stream_time = new Date().toISOString(),
   song_hash = '',
   max_copies = 1,
-  copies_released = 1,
   price = 1,
-  transaction_hash = '',
   ipfs_address = '',
   end_date = new Date().toISOString(),
   artist_public_address = '',
-  artist_public_key = '',
   hash = '',
   artist_signature = '',
-  signature_timestamp = '',
+  copy_number = '',
   // HARD CODED VALUES
   kyc = 'true',
   certificates_activated = 'true',
@@ -106,10 +103,10 @@ const ArtistPDFDocument = ({
   specify_credit_terms = 'Credit Terms',
   exclusive_rights = 'Rights',
   // ----------------- BUYER DETAILS --------------------
-  buyer_public_address,
-  buyer_public_key,
-  buyer_document_ipfs,
-  buyer_transaction_hash,
+  buyer_public_address = '',
+  buyer_public_key = '',
+  buyer_document_ipfs = '',
+  buyer_transaction_hash = '',
 }: any) => (
   <Document>
     {/* PAGE 1 */}
@@ -130,7 +127,7 @@ const ArtistPDFDocument = ({
       {TableSection('MONETIZATION DETAILS', {
         'KYC VERIFIED': kyc,
         'NO. OF MAX. COPIES': max_copies,
-        'NO. OF COPIES RELEASED': copies_released,
+        'COPY NUMBER': copy_number,
         'PRICE OF EACH COPIES': price,
         'CERTIFICATES ACTIVATED': certificates_activated,
         'CERTIFICATE IPFS ADDRESS': ipfs_address,
@@ -185,18 +182,15 @@ const ArtistPDFDocument = ({
       )}
       {TableSection('LICENSOR', {
         'Artist Public Address': artist_public_address,
-        Hash: hash,
-        'Artict Signature': artist_signature,
       })}
       {TableSection('BUYER LICENSOR', {
         'Buyer public address': buyer_public_address,
         'Buyer public key': buyer_public_key,
-        'Buyer document IPFS': buyer_document_ipfs,
         'Buyer transaction hash': buyer_transaction_hash,
-        'Signature timestamp': Date.now().toString(),
+        'Signature timestamp': new Date().toISOString(),
       })}
     </Page>
   </Document>
 );
 
-export default ArtistPDFDocument;
+export default BuyerPDFDocument;

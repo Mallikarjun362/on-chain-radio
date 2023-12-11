@@ -19,6 +19,7 @@ function MainNavigationBar() {
     // ROOMS
     'Join Rooms': '/join-rooms',
     'Create Rooms': '/create-rooms',
+    Governance: '#',
   };
   return (
     <div

@@ -1,33 +1,75 @@
 'use client';
 import { fetchAllStreamedData } from '@/utils/4_DatabaseActions';
 import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
-import {
-  support,
-  purchase,
-} from '../../utils/1_AptosBlockchain';
+import { support, purchase } from '../../utils/1_AptosBlockchain';
 import { useGlobalContext } from '../_context/store';
 import { getDayDiff } from '@/utils/6_ClientUtils';
 import { IAudio } from '@/mongodb_models/2_Audio';
 import { FaRegPlayCircle } from 'react-icons/fa';
 import 'react-h5-audio-player/lib/styles.css';
 import { useEffect, useState } from 'react';
+import PurchaseDialog from '../_components/PurchaseDialog';
+import BuyerPDFDocument from '../upload/_components/BuyerPdfDocument';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
 function StreamedAudiosSection() {
   // COMPONENT STATE VARIABLES
   const [audioList, setAudioList] = useState<Array<any>>([]);
-  const { wallet_address, wallet_object } = useGlobalContext();
+  const { wallet_address, wallet_object, public_key } = useGlobalContext();
   const [currentSongUrl, setCurrentSongUrl] = useState<null | string>(null);
   const [currentSongObject, setCurrentSongObject] = useState<null | IAudio>(
     null
   );
+  const [buyerDetails, setBuyerDetails] = useState<any>(null);
+  const [isDialogOpen, setDialogOpen] = useState(false);
+  const handleOpenDialog = () => {
+    setDialogOpen(true);
+  };
 
-  const handlePurchase = async ({ author_wallet_address, song_ipfs }: any) => {
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+  const sleep = (s: number) => new Promise((r) => setTimeout(r, s * 1000));
+
+  const handlePurchase = async ({ songDbObj }: any) => {
     // const details = await getPurchaseDetails(author_wallet_address);
-    purchase({
+    /*
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    ipfs_hash: { type: String, unique: true, index: true },
+    author_wallet_address: { type: String, required: true },
+    end_streaming_time: { type: Date },
+    collection_type: { type: String },
+    streaming_time: { type: Date },
+    description: { type: String },
+    artist_name: { type: String },
+    monitized: { type: Boolean },
+    title: { type: String },
+    */
+    const purchase_tx = await purchase({
       aptos_wallet: wallet_object,
-      song_ipfs: song_ipfs,
-      owner_artist_address: author_wallet_address,
+      song_ipfs: songDbObj?.ipfs_hash,
+      owner_artist_address: songDbObj?.author_wallet_address,
     });
+    if (purchase_tx?.hash) {
+      const b = {
+        artist_name: songDbObj?.artist_name,
+        title: songDbObj?.title,
+        collection_type: songDbObj?.collection_type,
+        collection_name: 'My Song Collection',
+        streaming_time: songDbObj?.streaming_time,
+        song_hash: songDbObj?.ipfs_hash,
+        artist_public_address: songDbObj?.author_wallet_address,
+        buyer_public_address: wallet_address,
+        buyer_public_key: public_key,
+        transaction_hash: purchase_tx?.hash,
+      };
+
+      setBuyerDetails(b);
+      sleep(2);
+      handleOpenDialog();
+      return;
+    }
+    // purchase_tx.hash
   };
 
   useEffect(() => {
@@ -131,7 +173,7 @@ function StreamedAudiosSection() {
                           artist_address: val?.author_wallet_address,
                           aptos_wallet: wallet_object,
                           amount: 0.5e8,
-                        })
+                        });
                       }}
                     >
                       Support
@@ -147,10 +189,7 @@ function StreamedAudiosSection() {
                         userSelect: 'none',
                       }}
                       onClick={() => {
-                        handlePurchase({
-                          author_wallet_address: val?.author_wallet_address,
-                          song_ipfs: val?.ipfs_hash,
-                        });
+                        handlePurchase({ songDbObj: val });
                       }}
                     >
                       Purchase
@@ -213,6 +252,63 @@ function StreamedAudiosSection() {
           />
         </div>
       ) : null}
+      <PurchaseDialog isOpen={isDialogOpen} onClose={handleCloseDialog}>
+        <PDFDownloadLink
+          document={
+            <BuyerPDFDocument
+              artist_name={buyerDetails?.artist_name}
+              title={buyerDetails?.title}
+              collection_type={buyerDetails?.collection_type}
+              collection_name={buyerDetails?.collection_name}
+              stream_time={buyerDetails?.streaming_time}
+              song_hash={buyerDetails?.song_hash}
+              max_copies={1000}
+              copies_released={1}
+              price={1}
+              ipfs_address={buyerDetails?.song_hash}
+              end_date={''}
+              artist_public_address={buyerDetails?.artist_public_address}
+              hash={''}
+              copy_number={1}
+              artist_signature={''}
+              // HARD CODED VALUES
+              kyc="true"
+              certificates_activated="true"
+              specify_dispute_resolution_mechanism="Dispute Resolution Mechanism"
+              specify_royalty_terms="Royality Terms"
+              your_jurisdiction="Your Jurisdiction"
+              specify_credit_terms="Credit Terms"
+              exclusive_rights="Rights"
+              // ----------------- BUYER DETAILS --------------------
+              buyer_public_address={buyerDetails?.buyer_public_address}
+              buyer_public_key={buyerDetails?.buyer_public_key}
+              buyer_document_ipfs={''}
+              buyer_transaction_hash={buyerDetails?.transaction_hash}
+            />
+          }
+          fileName="final_document.pdf"
+        >
+          {({ blob, url, loading, error }) =>
+            loading ? (
+              'Loading document...'
+            ) : (
+              <p
+                style={{
+                  backgroundColor: '#fff5',
+                  whiteSpace: 'nowrap',
+                  borderRadius: '7px',
+                  alignSelf: 'center',
+                  padding: '7px 30px',
+                  fontSize: '20px',
+                  color: 'black',
+                }}
+              >
+                Download Final PDF
+              </p>
+            )
+          }
+        </PDFDownloadLink>
+      </PurchaseDialog>
     </div>
   );
 }
