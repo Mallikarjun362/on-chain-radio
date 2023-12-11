@@ -12,3 +12,5 @@
 1. Requirements `Node.JS >= 18`
 2. After downloading the repository, run `yarn install`
 3. to run the application in development, run `yarn dev` and go to localhost.
+4. Having the aptos wallet chrome extension is necessary to perform some actions like creating audio, creating rooms for live streaming.
+5. The application consists of pages to view streamed (`/`), streaming (`/streaming`) and upcoming audio (`/upcoming`).
