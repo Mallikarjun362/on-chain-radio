@@ -1,16 +1,18 @@
-'use client';
-import { fetchAllStreamedData } from '@/utils/4_DatabaseActions';
-import AudioPlayer, { RHAP_UI } from 'react-h5-audio-player';
-import { support, purchase } from '../../utils/1_AptosBlockchain';
-import { useGlobalContext } from '../_context/store';
-import { getDayDiff } from '@/utils/6_ClientUtils';
-import { IAudio } from '@/mongodb_models/2_Audio';
-import { FaRegPlayCircle } from 'react-icons/fa';
-import 'react-h5-audio-player/lib/styles.css';
-import { useEffect, useState } from 'react';
-import PurchaseDialog from '../_components/PurchaseDialog';
-import BuyerPDFDocument from '../upload/_components/BuyerPdfDocument';
-import { PDFDownloadLink } from '@react-pdf/renderer';
+"use client";
+// STANDARD LIBRARY IMPORTS
+import AudioPlayer, { RHAP_UI } from "react-h5-audio-player";
+import { PDFDownloadLink } from "@react-pdf/renderer";
+import { FaRegPlayCircle } from "react-icons/fa";
+import "react-h5-audio-player/lib/styles.css";
+import { useEffect, useState } from "react";
+// APPLICATION IMPORTS
+import BuyerPDFDocument from "../(Main)/upload/_components/BuyerPdfDocument";
+import { support, purchase } from "../../utils/AptosBlockchain";
+import { fetchAllStreamedData } from "@/utils/DatabaseActions";
+import HoverDialog from "../_components/HoverDialog";
+import { useGlobalContext } from "../_context/store";
+import { getDayDiff } from "@/utils/ClientUtils";
+import { IAudio } from "@/models/Audio";
 
 function StreamedAudiosSection() {
   // COMPONENT STATE VARIABLES
@@ -55,7 +57,7 @@ function StreamedAudiosSection() {
         artist_name: songDbObj?.artist_name,
         title: songDbObj?.title,
         collection_type: songDbObj?.collection_type,
-        collection_name: 'My Song Collection',
+        collection_name: "My Song Collection",
         streaming_time: songDbObj?.streaming_time,
         song_hash: songDbObj?.ipfs_hash,
         artist_public_address: songDbObj?.author_wallet_address,
@@ -93,80 +95,81 @@ function StreamedAudiosSection() {
   return (
     <div
       style={{
-        fontFamily: 'Arial, sans-serif',
-        flexDirection: 'column',
-        alignItems: 'center',
-        display: 'flex',
+        fontFamily: "Arial, sans-serif",
+        flexDirection: "column",
+        alignItems: "center",
+        display: "flex",
       }}
     >
       {/* == DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS == */}
       <div
         className="w-[80%] | lg:w-[60%] | md:w-[60%]"
-        style={{ marginBottom: '200px' }}
+        style={{ marginBottom: "200px" }}
       >
-        <h1 style={{ fontSize: '2em' }}>Recently streamed</h1>
+        <h1 style={{ fontSize: "2em" }}>Recently streamed</h1>
         <br />
         <ul
           style={{
-            flexDirection: 'column',
-            listStyle: 'none',
-            display: 'flex',
-            gap: '10px',
+            flexDirection: "column",
+            listStyle: "none",
+            display: "flex",
+            gap: "10px",
           }}
         >
-          {audioList.map(
+          {audioList?.map(
             (val, idx) =>
               val.ipfs_hash && (
                 <li
-                  className="flex-col bg-[#fff1]| lg:flex-row | md:flex-row"
+                  className="flex-col | lg:flex-row | md:flex-row"
                   key={idx}
                   style={{
                     background:
                       currentSongObject?.ipfs_hash === val.ipfs_hash
-                        ? '#1db954'
-                        : '#fff1',
-                    justifyContent: 'space-between',
-                    padding: '10px 30px',
-                    borderRadius: '5px',
-                    display: 'flex',
-                    color: 'white',
+                        ? "#1db954BB"
+                        : "#fff2",
+                    justifyContent: "space-between",
+                    padding: "10px 30px",
+                    borderRadius: "5px",
+                    display: "flex",
+                    color: "white",
+                    backdropFilter: "blur(20px)",
                   }}
                 >
                   <div>
-                    <span style={{ fontSize: '22px' }}>{val?.title}</span>
+                    <span style={{ fontSize: "22px" }}>{val?.title}</span>
                     <br />
-                    <span style={{ color: '#fff6' }}>{val?.description}</span>
+                    <span style={{ color: "#fff6" }}>{val?.description}</span>
                   </div>
                   <div
                     className="gap-[20px] | lg:gap-[100px] | md:gap-[30px] "
                     style={{
-                      alignItems: 'center',
-                      display: 'flex',
+                      alignItems: "center",
+                      display: "flex",
                     }}
                   >
-                    <div style={{ color: '#fff6', width: '40%' }}>
+                    <div style={{ color: "#fff6", width: "40%" }}>
                       {getDayDiff(val?.streaming_time)}
                     </div>
                     <button
                       onClick={() => playAudio(val)}
                       className="text-[#fff7] hover:text-[#fff]"
                       style={{
-                        borderRadius: '100%',
-                        fontSize: '35px',
-                        padding: '0px',
+                        borderRadius: "100%",
+                        fontSize: "35px",
+                        padding: "0px",
                       }}
                     >
                       <FaRegPlayCircle />
                     </button>
                     <button
                       style={{
-                        background: '#1db954',
-                        padding: '8px 12px',
-                        borderRadius: '10%',
-                        userSelect: 'none',
-                        cursor: 'pointer',
-                        border: 'none',
-                        color: '#fff',
+                        background: "#1db954",
+                        padding: "8px 12px",
+                        borderRadius: "10%",
+                        userSelect: "none",
+                        cursor: "pointer",
+                        border: "none",
+                        color: "#fff",
                       }}
                       onClick={() => {
                         support({
@@ -180,13 +183,13 @@ function StreamedAudiosSection() {
                     </button>
                     <button
                       style={{
-                        background: '#1db954',
-                        padding: '8px 12px',
-                        borderRadius: '10%',
-                        cursor: 'pointer',
-                        border: 'none',
-                        color: '#fff',
-                        userSelect: 'none',
+                        background: "#1db954",
+                        padding: "8px 12px",
+                        borderRadius: "10%",
+                        cursor: "pointer",
+                        border: "none",
+                        color: "#fff",
+                        userSelect: "none",
                       }}
                       onClick={() => {
                         handlePurchase({ songDbObj: val });
@@ -204,23 +207,23 @@ function StreamedAudiosSection() {
       {true ? (
         <div
           style={{
-            backdropFilter: 'blur(100px)',
-            backgroundColor: '#0005',
-            paddingBottom: '30px',
-            position: 'fixed',
-            padding: '10px',
-            color: 'white',
-            width: '100vw',
+            backdropFilter: "blur(100px)",
+            backgroundColor: "#0005",
+            paddingBottom: "30px",
+            position: "fixed",
+            padding: "10px",
+            color: "white",
+            width: "100%",
             bottom: 0,
           }}
         >
           <AudioPlayer
             style={{
-              backgroundColor: '#0000',
-              outline: 'none',
-              border: 'none',
+              backgroundColor: "#0001",
+              outline: "none",
+              border: "none",
             }}
-            src={currentSongUrl || ''}
+            src={currentSongUrl || ""}
             autoPlay
             layout="stacked-reverse"
             showSkipControls={false}
@@ -231,12 +234,11 @@ function StreamedAudiosSection() {
               <div
                 key={0}
                 style={{
-                  width: 'calc(50% - 20px)',
-                  fontSize: '20px',
+                  width: "calc(50% - 20px)",
+                  fontSize: "25px",
                 }}
               >
-                {'Now Playing: '}
-                {currentSongObject?.title}
+                {currentSongObject?.title ? currentSongObject?.title : "..."}
               </div>,
               RHAP_UI.MAIN_CONTROLS,
               RHAP_UI.VOLUME_CONTROLS,
@@ -252,7 +254,7 @@ function StreamedAudiosSection() {
           />
         </div>
       ) : null}
-      <PurchaseDialog isOpen={isDialogOpen} onClose={handleCloseDialog}>
+      <HoverDialog isOpen={isDialogOpen} onClose={handleCloseDialog}>
         <PDFDownloadLink
           document={
             <BuyerPDFDocument
@@ -266,11 +268,11 @@ function StreamedAudiosSection() {
               copies_released={1}
               price={1}
               ipfs_address={buyerDetails?.song_hash}
-              end_date={''}
+              end_date={""}
               artist_public_address={buyerDetails?.artist_public_address}
-              hash={''}
+              hash={""}
               copy_number={1}
-              artist_signature={''}
+              artist_signature={""}
               // HARD CODED VALUES
               kyc="true"
               certificates_activated="true"
@@ -282,7 +284,7 @@ function StreamedAudiosSection() {
               // ----------------- BUYER DETAILS --------------------
               buyer_public_address={buyerDetails?.buyer_public_address}
               buyer_public_key={buyerDetails?.buyer_public_key}
-              buyer_document_ipfs={''}
+              buyer_document_ipfs={""}
               buyer_transaction_hash={buyerDetails?.transaction_hash}
             />
           }
@@ -290,17 +292,17 @@ function StreamedAudiosSection() {
         >
           {({ blob, url, loading, error }) =>
             loading ? (
-              'Loading document...'
+              "Loading document..."
             ) : (
               <p
                 style={{
-                  backgroundColor: '#fff5',
-                  whiteSpace: 'nowrap',
-                  borderRadius: '7px',
-                  alignSelf: 'center',
-                  padding: '7px 30px',
-                  fontSize: '20px',
-                  color: 'black',
+                  backgroundColor: "#fff5",
+                  whiteSpace: "nowrap",
+                  borderRadius: "7px",
+                  alignSelf: "center",
+                  padding: "7px 30px",
+                  fontSize: "20px",
+                  color: "black",
                 }}
               >
                 Download Final PDF
@@ -308,7 +310,7 @@ function StreamedAudiosSection() {
             )
           }
         </PDFDownloadLink>
-      </PurchaseDialog>
+      </HoverDialog>
     </div>
   );
 }

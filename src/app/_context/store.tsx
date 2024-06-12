@@ -1,11 +1,11 @@
-'use client';
+"use client";
 import {
   SetStateAction,
   createContext,
   useContext,
   Dispatch,
   useState,
-} from 'react';
+} from "react";
 
 interface ContextProps {
   wallet_address: string;
@@ -23,26 +23,26 @@ interface ContextProps {
 }
 
 const GlobalContext = createContext<ContextProps>({
-  wallet_address: '',
-  setWalletAddress: (): string => '',
+  wallet_address: "",
+  setWalletAddress: (): string => "",
   wallet_object: {},
   setWalletObject: (): any => {},
   is_connected: false,
   setConnectionStatus: (): Boolean => false,
-  public_key: '',
-  setPublicKey: (): string => '',
-  jwt_auth_token: '',
-  setJwtAuthToken: (): string => '',
+  public_key: "",
+  setPublicKey: (): string => "",
+  jwt_auth_token: "",
+  setJwtAuthToken: (): string => "",
   userCreatedRooms: [],
   setUserCreatedRooms: (): Array<any> => [],
 });
 
 export const GlobalContextProvider = ({ children }: { children: any }) => {
-  const [wallet_address, setWalletAddress] = useState('');
+  const [wallet_address, setWalletAddress] = useState("");
   const [wallet_object, setWalletObject] = useState({});
   const [is_connected, setConnectionStatus] = useState(false);
-  const [public_key, setPublicKey] = useState('');
-  const [jwt_auth_token, setJwtAuthToken] = useState('');
+  const [public_key, setPublicKey] = useState("");
+  const [jwt_auth_token, setJwtAuthToken] = useState("");
   const [userCreatedRooms, setUserCreatedRooms] = useState<Array<any>>([]);
   return (
     <GlobalContext.Provider
