@@ -1,4 +1,7 @@
 # On Chain Radio
+| | |
+|-|-|
+|![Demo](./screenshots/D_LandingPage.png)| ![Demo](./screenshots/M_LandingPage.png) |
 
 # Tech-stack Used
 
@@ -50,3 +53,17 @@
 1. **Github Repo** : 
     1. **Frontend** : [https://github.com/Mallikarjun362/on-chain-radio](https://github.com/Mallikarjun362/on-chain-radio)
     1. **Socket.io Streaing server** : [https://github.com/Mallikarjun362/socket-io-streaming-server](https://github.com/Mallikarjun362/socket-io-streaming-server) 
+
+# Demo
+### Profile page
+| | |
+|-|-|
+|![Demo](./screenshots/D_ProfilePage.png)|![Demo](./screenshots/M_ProfilePage.png)|
+
+### Audio upload page
+
+![Demo](./screenshots/D_UploadPage.png)
+
+### Listeners page
+
+![Demo](./screenshots/D_LisenerRoom.png)
