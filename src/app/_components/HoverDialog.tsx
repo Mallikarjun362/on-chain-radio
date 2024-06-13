@@ -34,9 +34,9 @@ function HoverDialog({ isOpen, onClose, children }: any) {
           padding: "40px",
           minHeight: "40%",
           minWidth: "40%",
+          paddingTop: "100px",
           zIndex: 100,
           gap: "15px",
-          paddingTop: "100px",
         }}
       >
         <button

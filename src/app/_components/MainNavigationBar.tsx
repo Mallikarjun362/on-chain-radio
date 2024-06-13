@@ -23,21 +23,20 @@ function MainNavigationBar() {
   };
   return (
     <div
-      className="flex lg:flex-row lg:align-middle lg:justify-between"
+      className="flex lg:flex-row lg:align-middle lg:justify-between lg:pl-[50px] lg:pr-[50px] p-[10px] pr-[30px]"
       style={{
         justifyContent: "space-between",
         backdropFilter: "blur(19px)",
         backgroundColor: "#0008",
-        paddingRight: "150px",
         alignItems: "center",
-        padding: "20px 50px",
         userSelect: "none",
-        overflow: "hidden",
         position: "sticky",
         width: "100vw",
         gap: "30px",
         zIndex: 3,
-        top: "0",
+        right:0,
+        top: 0,
+        left:0,
       }}
     >
       <BrandTitleLogo title={page_content.title} />

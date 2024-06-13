@@ -128,28 +128,39 @@ function StreamedAudiosSection() {
                         ? "#1db954BB"
                         : "#fff2",
                     justifyContent: "space-between",
+                    backdropFilter: "blur(20px)",
                     padding: "10px 30px",
                     borderRadius: "5px",
                     display: "flex",
                     color: "white",
-                    backdropFilter: "blur(20px)",
+                    width: "100%",
                   }}
                 >
-                  <div>
-                    <span style={{ fontSize: "22px" }}>{val?.title}</span>
-                    <br />
-                    <span style={{ color: "#fff6" }}>{val?.description}</span>
-                  </div>
                   <div
-                    className="gap-[20px] | lg:gap-[100px] | md:gap-[30px] "
                     style={{
+                      justifyContent: "space-between",
                       alignItems: "center",
                       display: "flex",
+                      width: "100%",
                     }}
                   >
+                    <div>
+                      <span style={{ fontSize: "22px" }}>{val?.title}</span>
+                      <br />
+                      <span style={{ color: "#fff6" }}>{val?.description}</span>
+                    </div>
                     <div style={{ color: "#fff6", width: "40%" }}>
                       {getDayDiff(val?.streaming_time)}
                     </div>
+                  </div>
+                  <div
+                    style={{
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      display: "flex",
+                      width: "100%",
+                    }}
+                  >
                     <button
                       onClick={() => playAudio(val)}
                       className="text-[#fff7] hover:text-[#fff]"
@@ -215,6 +226,8 @@ function StreamedAudiosSection() {
             color: "white",
             width: "100%",
             bottom: 0,
+            left: 0,
+            right: 0,
           }}
         >
           <AudioPlayer
