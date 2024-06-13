@@ -103,7 +103,7 @@ function StreamedAudiosSection() {
     >
       {/* == DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS ==== DISPLAY OF STREAMED SONGS == */}
       <div
-        className="w-[80%] | lg:w-[60%] | md:w-[60%]"
+        className="w-[80%] | lg:w-[60%] "
         style={{ marginBottom: "200px" }}
       >
         <h1 style={{ fontSize: "2em" }}>Recently streamed</h1>

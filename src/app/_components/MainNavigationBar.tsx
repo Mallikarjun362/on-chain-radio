@@ -23,7 +23,7 @@ function MainNavigationBar() {
   };
   return (
     <div
-      className="flex lg:flex-row lg:align-middle lg:justify-between lg:pl-[50px] lg:pr-[50px] p-[10px] pr-[30px]"
+      className="lg:flex-row lg:align-middle lg:justify-between lg:pl-[30px] lg:pr-[50px] | p-[10px] pt-[20px] pb-[20px]"
       style={{
         justifyContent: "space-between",
         backdropFilter: "blur(19px)",
@@ -31,15 +31,16 @@ function MainNavigationBar() {
         alignItems: "center",
         userSelect: "none",
         position: "sticky",
+        display: "flex",
         width: "100vw",
-        gap: "30px",
-        zIndex: 3,
-        right:0,
+        zIndex: 10, // It works
+        right: 0,
+        left: 0,
         top: 0,
-        left:0,
       }}
     >
       <BrandTitleLogo title={page_content.title} />
+      <div style={{ width: "30px" }}></div>
       <div
         className="hidden lg:flex"
         style={{
@@ -53,7 +54,11 @@ function MainNavigationBar() {
         ))}
         <ConnectWalletButton />
       </div>
-      <HoverMenuButtom primary_links={primary_links} />
+      <HoverMenuButtom primary_links={primary_links}>
+        {Object.keys(primary_links).map((val: any, idx) => (
+          <NavLink url={primary_links[val]} name={val} key={idx} />
+        ))}
+      </HoverMenuButtom>
     </div>
   );
 }

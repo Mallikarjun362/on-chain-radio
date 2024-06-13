@@ -1,11 +1,9 @@
 "use client";
-import { CSSProperties, useEffect, useState } from "react";
-import { useGlobalContext } from "../_context/store";
 import { getCookieValue, delete_cookie } from "@/utils/Authentication";
-import { CgMenu } from "react-icons/cg";
-import ReactDom from "react-dom";
-import HoverDialog from "./HoverDialog";
+import { CSSProperties, useEffect } from "react";
+import { useGlobalContext } from "../_context/store";
 import { NavLink } from "./ServerComponents";
+import { CgMenu } from "react-icons/cg";
 
 export function ConnectWalletButton() {
   const {
@@ -105,32 +103,37 @@ export function ConnectWalletButton() {
   }
 }
 
-export const HoverMenuButtom = ({ primary_links }: any) => {
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+export const HoverMenuButtom = ({ children }: any) => {
+  const { setHoverContent } = useGlobalContext();
   return (
-    <>
-      <div
-        className="hover:bg-[#FFF6] lg:hidden"
-        onClick={() => setIsDialogOpen(true)}
-        style={{
-          border: "2px solid white",
-          height: "fit-content",
-          borderRadius: "5px",
-          cursor: "pointer",
-        }}
-      >
-        <CgMenu style={{ fontSize: "40px" }} />
-      </div>
-      <HoverDialog
-        isOpen={isDialogOpen}
-        onClose={() => {
-          setIsDialogOpen(false);
-        }}
-      >
-          {...(Object.keys(primary_links).map((val: any, idx) => (
-            <NavLink url={primary_links[val]} name={val} key={idx} />
-          )))}
-      </HoverDialog>
-    </>
+    <div
+      className="lg:hidden block"
+      onClick={() =>
+        setHoverContent(
+          <div style={{ padding: "40px" }}>
+            <h2 style={{ fontSize: "40px" }}>Menu</h2>
+            <br />
+            <div
+              style={{
+                flexWrap: "wrap",
+                display: "flex",
+                minWidth: "50vw",
+                gap: "15px",
+              }}
+            >
+              {children}
+            </div>
+          </div>
+        )
+      }
+      style={{
+        border: "2px solid white",
+        height: "fit-content",
+        borderRadius: "5px",
+        cursor: "pointer",
+      }}
+    >
+      <CgMenu style={{ fontSize: "40px" }} />
+    </div>
   );
 };

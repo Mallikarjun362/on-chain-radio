@@ -8,6 +8,8 @@ import {
 } from "react";
 
 interface ContextProps {
+  hoverContent: any;
+  setHoverContent: Dispatch<SetStateAction<any>>;
   wallet_address: string;
   setWalletAddress: Dispatch<SetStateAction<string>>;
   wallet_object: Object;
@@ -23,6 +25,8 @@ interface ContextProps {
 }
 
 const GlobalContext = createContext<ContextProps>({
+  hoverContent: null,
+  setHoverContent: (): any => null,
   wallet_address: "",
   setWalletAddress: (): string => "",
   wallet_object: {},
@@ -44,9 +48,12 @@ export const GlobalContextProvider = ({ children }: { children: any }) => {
   const [public_key, setPublicKey] = useState("");
   const [jwt_auth_token, setJwtAuthToken] = useState("");
   const [userCreatedRooms, setUserCreatedRooms] = useState<Array<any>>([]);
+  const [hoverContent, setHoverContent] = useState(null);
   return (
     <GlobalContext.Provider
       value={{
+        hoverContent,
+        setHoverContent,
         wallet_address,
         setWalletAddress,
         wallet_object,

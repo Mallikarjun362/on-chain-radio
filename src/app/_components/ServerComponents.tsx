@@ -8,13 +8,16 @@ export function BrandTitleLogo({ title }: { title: string }) {
       style={{
         fontFamily: "Times New Roman, Times, serif",
         alignItems: "center",
-        fontSize: "35px",
         display: "flex",
-        gap: "20px",
+        gap: "10px",
       }}
     >
       <PiRadio style={{ fontSize: "45px" }} />
-      <span style={{ display: "block", whiteSpace: "nowrap" }}>{title}</span>
+      <span
+        style={{ display: "block", fontSize: "30px", whiteSpace: "nowrap" }}
+      >
+        {title}
+      </span>
     </Link>
   );
 }
