@@ -32,6 +32,7 @@ function MainNavigationBar() {
         alignItems: "center",
         padding: "20px 50px",
         userSelect: "none",
+        overflow: "hidden",
         position: "sticky",
         width: "100vw",
         gap: "30px",
@@ -53,7 +54,7 @@ function MainNavigationBar() {
         ))}
         <ConnectWalletButton />
       </div>
-      <HoverMenuButtom primary_links={primary_links}/>
+      <HoverMenuButtom primary_links={primary_links} />
     </div>
   );
 }
